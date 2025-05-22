@@ -1,4 +1,3 @@
-<!-- BtnPrimary.vue -->
 <script setup>
 defineProps({
     type: {
@@ -16,7 +15,7 @@ defineProps({
     <button
         :type="type"
         :disabled="processing"
-        class="btn btn-primary w-full"
+        class="btn btn-neutral w-full"
         :class="processing ? 'btn-disabled cursor-not-allowed' : ''"
     >
         <slot v-if="!processing" />

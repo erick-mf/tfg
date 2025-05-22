@@ -19,7 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'surnames',
+        'phone',
+        'phone_emergency',
+        'role',
         'password',
     ];
 
@@ -33,6 +36,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        'full_name',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -44,5 +51,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getFullNameAttribute()
+    {
+        return trim(implode(' ', array_filter([$this->name, $this->surnames])));
     }
 }

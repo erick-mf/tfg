@@ -9,9 +9,10 @@ const form = useForm({
 
 function submit() {
     if (form.password.length !== 6) {
-        form.setError('password', 'La contraseña no es correcta');
+        form.setError('password', 'La contraseña es incorrecta');
     } else {
-        form.post(route('dashboard'));
+        form.password = form.password.toUpperCase();
+        form.post(route('login.submit'));
     }
 }
 </script>
@@ -21,7 +22,7 @@ function submit() {
         <div class="mx-auto w-full px-4 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4">
             <div class="w-full rounded-lg bg-white p-8 shadow-xl">
                 <div class="mb-8 text-center">
-                    <a :href="route('home')" class="text-3xl font-semibold">Logo</a>
+                    <a :href="route('login')" class="text-3xl font-semibold">Logo</a>
                 </div>
 
                 <form @submit.prevent="submit" class="flex flex-col gap-2">
