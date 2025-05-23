@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'role' => 'encargado',
         ]);
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 1; $i < 31; $i++) {
             User::factory()->create([
                 'name' => fake()->name(),
                 'role' => fake()->randomElement(['cocinero', 'camarero']),

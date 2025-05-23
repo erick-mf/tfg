@@ -11,7 +11,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function paginate(int $perPage = 10)
     {
-        return $this->user->paginate($perPage)->getCollection();
+        return $this->user->paginate($perPage);
     }
 
     public function findById($id)
@@ -21,6 +21,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function create(array $data)
     {
+
         return $this->user->create($data);
     }
 

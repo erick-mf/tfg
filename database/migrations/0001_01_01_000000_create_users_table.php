@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
             $table->unique(['name', 'surnames', 'phone'], 'name_surnames_phone_unique');
         });
 

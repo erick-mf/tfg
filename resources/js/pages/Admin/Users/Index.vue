@@ -10,7 +10,7 @@ import { ref } from 'vue';
 
 defineProps({
     users: {
-        type: Array,
+        type: Object,
     },
 });
 

@@ -31,8 +31,8 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'],
-            'surnames' => ['required', 'string', 'min:3', 'max:150', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/'],
+            'name' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[\p{L}\s]+$/u'],
+            'surnames' => ['required', 'string', 'min:3', 'max:150', 'regex:/^[\p{L}\s]+$/u'],
             'phone' => ['required',  'size:9', 'regex:/^[0-9]+$/'],
             'phone_emergency' => ['nullable',  'size:9', 'regex:/^[0-9]+$/'],
             'role' => ['required', 'in:encargado,camarero,cocinero'],

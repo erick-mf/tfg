@@ -33,11 +33,11 @@ class UserController extends Controller
         try {
             $this->repository->create($validated);
 
-            return redirect()->route('admin.users.index')->with('toast', ['type' => 'success', 'message' => 'Usuario creado correctamente']);
+            return redirect()->back()->with('toast', ['type' => 'success', 'message' => 'Usuario creado correctamente']);
         } catch (Exception $e) {
             Log::error('Error creating user: '.$e);
 
-            return redirect()->route('admin.users.index')->with('toast', ['type' => 'error', 'message' => 'Ha ocurrido un error al crear el usuario']);
+            return redirect()->back()->with('toast', ['type' => 'error', 'message' => 'Ha ocurrido un error al crear el usuario']);
         }
     }
 
@@ -50,11 +50,11 @@ class UserController extends Controller
             $validated = $request->validated();
             $this->repository->update($validated, $user);
 
-            return redirect()->route('admin.users.index')->with('toast', ['type' => 'success', 'message' => 'Usuario actualizado correctamente']);
+            return redirect()->back()->with('toast', ['type' => 'success', 'message' => 'Usuario actualizado correctamente']);
         } catch (Exception $e) {
             Log::error('Error updating user: '.$e);
 
-            return redirect()->route('admin.users.index')->with('toast', ['type' => 'error', 'message' => 'Ha ocurrido un error al actualizar el usuario']);
+            return redirect()->back()->with('toast', ['type' => 'error', 'message' => 'Ha ocurrido un error al actualizar el usuario']);
         }
     }
 
@@ -66,11 +66,11 @@ class UserController extends Controller
         try {
             $this->repository->delete($user);
 
-            return redirect()->route('admin.users.index')->with('toast', ['type' => 'success', 'message' => 'Usuario eliminado correctamente']);
+            return redirect()->back()->with('toast', ['type' => 'success', 'message' => 'Usuario eliminado correctamente']);
         } catch (Exception $e) {
             Log::error('Error deleting user: '.$e);
 
-            return redirect()->route('admin.users.index')->with('toast', ['type' => 'error', 'message' => 'Ha ocurrido un error al eliminar el usuario']);
+            return redirect()->back()->with('toast', ['type' => 'error', 'message' => 'Ha ocurrido un error al eliminar el usuario']);
         }
     }
 }

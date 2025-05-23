@@ -1,12 +1,13 @@
 <script setup>
 import ConfirmationDeleteModal from '@/components/ConfirmationDeleteModal.vue';
+import Pagination from '@/components/Pagination.vue';
 import { router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 const props = defineProps({
     content: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        required: true,
     },
     columns: {
         type: Array,
@@ -22,7 +23,9 @@ const props = defineProps({
     },
 });
 
-const hasContent = computed(() => props.content.length > 0);
+const data = computed(() => props.content.data);
+const pagination = computed(() => props.content);
+const hasContent = computed(() => data.value.length > 0);
 
 const emit = defineEmits(['edit-user']);
 
@@ -31,7 +34,9 @@ function editItem(item) {
 }
 
 function deleteItem(item, action) {
-    router.delete(route(`${action}`, item));
+    router.delete(route(`${action}`, item), {
+        preserveScroll: true,
+    });
 }
 </script>
 
@@ -47,7 +52,7 @@ function deleteItem(item, action) {
                 </thead>
 
                 <tbody>
-                    <tr class="hover:bg-base-300" v-for="(item, itemIndex) in content" :key="itemIndex">
+                    <tr class="hover:bg-base-300" v-for="(item, itemIndex) in data" :key="itemIndex">
                         <td v-for="(column, colIndex) in columns" :key="colIndex">
                             <p v-if="item[column.field] === null">No disponible</p>
                             <p v-else>{{ item[column.field] }}</p>
@@ -108,15 +113,11 @@ function deleteItem(item, action) {
         <div class="bg-base-200 px-4 py-2" v-if="hasContent">
             <div class="flex items-center justify-between text-sm">
                 <div>
-                    Mostrando <span class="font-medium">{{ content.length }}</span> registros
+                    Mostrando <span class="font-medium">{{ data.length }}</span> de
+                    <span class="font-medium">{{ pagination.total }}</span> registros
                 </div>
-                <div class="join">
-                    <button class="join-item btn btn-sm">«</button>
-                    <button class="join-item btn btn-sm btn-active">1</button>
-                    <button class="join-item btn btn-sm">2</button>
-                    <button class="join-item btn btn-sm">3</button>
-                    <button class="join-item btn btn-sm">»</button>
-                </div>
+
+                <Pagination :pagination="pagination" />
             </div>
         </div>
     </div>
