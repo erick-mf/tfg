@@ -1,19 +1,26 @@
 <script setup>
 import BtnPrimary from '@/components/BtnPrimary.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
+import { validatorLoginForm } from '@/lib/validatorLoginForm';
 import { useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const form = useForm({
     password: '',
 });
 
+const errors = ref({
+    password: '',
+});
+
 function submit() {
-    if (form.password.length !== 6) {
-        form.setError('password', 'La contraseña es incorrecta');
-    } else {
-        form.password = form.password.toUpperCase();
-        form.post(route('login.submit'));
-    }
+    const isValid = validatorLoginForm(form, errors);
+
+    if (!isValid) return;
+
+    form.post(route('login.submit'), {
+        onSuccess: () => form.reset(),
+    });
 }
 </script>
 
@@ -25,14 +32,13 @@ function submit() {
                     <a :href="route('login')" class="text-3xl font-semibold">Logo</a>
                 </div>
 
-                <form @submit.prevent="submit" class="flex flex-col gap-2">
-                    <div class="min-h-[20px]">
-                        <p v-if="form.errors.password" class="text-sm text-red-600">
-                            {{ form.errors.password }}
-                        </p>
-                    </div>
-
-                    <div class="flex flex-col gap-4">
+                <form @submit.prevent="submit" class="flex flex-col gap-6">
+                    <div class="flex flex-col gap-2">
+                        <div class="min-h-[20px]">
+                            <p v-if="errors.password" class="text-sm text-red-600">
+                                {{ errors.password }}
+                            </p>
+                        </div>
                         <label class="input w-full text-lg">
                             <input
                                 v-model="form.password"
@@ -41,11 +47,8 @@ function submit() {
                                 autocomplete="off"
                             />
                         </label>
-
-                        <div>
-                            <BtnPrimary type="submit" :processing="form.processing"> Ingresar </BtnPrimary>
-                        </div>
                     </div>
+                    <BtnPrimary type="submit" :processing="form.processing"> Ingresar </BtnPrimary>
                 </form>
             </div>
         </div>

@@ -10,6 +10,8 @@ interface UserRepositoryInterface
 
     public function findById($id);
 
+    public function findByPassword($password);
+
     public function create(array $data);
 
     public function update(array $data, User $user);

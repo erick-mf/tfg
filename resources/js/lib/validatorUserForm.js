@@ -72,7 +72,7 @@ export function validatorUserForm(form, errors, user = null) {
 
     // Validación password
     if (!form.id || !user) {
-        if (!form.password) {
+        if (!form.password.trim()) {
             errors.value.password = 'El campo password es obligatorio.';
             isValid = false;
         } else if (form.password.length !== 6) {

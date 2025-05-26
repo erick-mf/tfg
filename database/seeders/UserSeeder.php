@@ -18,11 +18,11 @@ class UserSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'name' => 'admin',
+            'name' => 'encargado',
             'role' => 'encargado',
         ]);
 
-        for ($i = 1; $i < 31; $i++) {
+        for ($i = 2; $i < 31; $i++) {
             User::factory()->create([
                 'name' => fake()->name(),
                 'role' => fake()->randomElement(['cocinero', 'camarero']),

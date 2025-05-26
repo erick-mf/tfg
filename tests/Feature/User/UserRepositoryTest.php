@@ -4,26 +4,21 @@ namespace Tests\Feature\User;
 
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
-use Exception;
-use Illuminate\Support\Collection;
-use Mockery\MockInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 beforeEach(function () {
     $this->repository = app(UserRepositoryInterface::class);
 });
 
-afterEach(function () {
-    \Mockery::close();
-});
-
-test('paginate returns user collection', function () {
+test('paginate returns correct number of items per page', function () {
     User::factory()->count(15)->create();
 
     $result = $this->repository->paginate(10);
 
-    expect($result)
-        ->toBeInstanceOf(Collection::class)
-        ->toHaveCount(10);
+    expect($result)->toBeInstanceOf(LengthAwarePaginator::class);
+    expect($result->items())->toHaveCount(10);
+    expect($result->total())->toBe(15);
+    expect($result->items())->each->toBeInstanceOf(User::class);
 });
 
 test('findById returns correct user', function () {
@@ -73,19 +68,6 @@ test('update user successfully', function () {
         ->name->toBe('New Name');
 });
 
-test('update throws exception on failure', function () {
-    $this->mock(UserRepositoryInterface::class, function (MockInterface $mock) {
-        $mock->shouldReceive('update')
-            ->once()
-            ->andThrow(new Exception('Error updating user'));
-    });
-
-    $user = User::factory()->create();
-
-    app(UserRepositoryInterface::class)
-        ->update(['name' => 'New Name'], $user);
-})->throws(Exception::class, 'Error updating user');
-
 test('delete user successfully', function () {
     $user = User::factory()->create();
 
@@ -94,16 +76,3 @@ test('delete user successfully', function () {
     expect($result)->toBeTrue();
     expect(User::count())->toBe(0);
 });
-
-test('delete throws exception on failure', function () {
-    $this->mock(UserRepositoryInterface::class, function (MockInterface $mock) {
-        $mock->shouldReceive('delete')
-            ->once()
-            ->andThrow(new Exception('Error deleting user'));
-    });
-
-    $user = User::factory()->create();
-
-    app(UserRepositoryInterface::class)
-        ->delete($user);
-})->throws(Exception::class, 'Error deleting user');

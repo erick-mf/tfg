@@ -4,6 +4,7 @@ import SearchForm from '@/components/SearchForm.vue';
 import SidebarBtn from '@/components/SidebarBtn.vue';
 import SidebarRight from '@/components/SidebarRight.vue';
 import Table from '@/components/Table.vue';
+import UserCard from '@/components/UserCard.vue';
 import UserForm from '@/components/UserForm.vue';
 import BaseLayout from '@/layouts/BaseLayout.vue';
 import { ref } from 'vue';
@@ -42,7 +43,7 @@ function handleEditUser(user) {
     <BaseLayout>
         <template #header>
             <div class="flex w-full items-center justify-between gap-4">
-                <h1 class="text-xl font-semibold">Gestión de Usuarios</h1>
+                <h1 class="text-base font-semibold sm:text-xl">Lista de Usuarios</h1>
 
                 <div class="flex items-center gap-3">
                     <SearchForm />
@@ -54,6 +55,12 @@ function handleEditUser(user) {
 
         <template #content>
             <Table
+                :content="users"
+                :columns="columns"
+                emptyMessage="No hay usuarios registrados"
+                @edit-user="handleEditUser"
+            />
+            <UserCard
                 :content="users"
                 :columns="columns"
                 emptyMessage="No hay usuarios registrados"

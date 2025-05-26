@@ -5,7 +5,7 @@ test('loads login page successfully', function () {
 });
 
 test('successful login redirects to dashboard', function () {
-    $this->post(route('login.submit'), ['password' => '12345A'])
+    $this->post(route('login.submit'), ['password' => '12345a'])
         ->assertRedirect(route('admin.dashboard'));
 });
 
@@ -29,6 +29,6 @@ test('password must be alphanumeric', function () {
 });
 
 test('incorrect password shows error', function () {
-    $this->post(route('login'), ['password' => '000000'])
+    $this->post(route('login'), ['password' => '23456a'])
         ->assertSessionHasErrors(['password' => 'La contraseña es incorrecta']);
 });

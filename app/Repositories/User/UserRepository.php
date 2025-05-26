@@ -19,6 +19,11 @@ class UserRepository implements UserRepositoryInterface
         return $this->user->find($id);
     }
 
+    public function findByPassword($password)
+    {
+        return $this->user->where('password', $password)->first();
+    }
+
     public function create(array $data)
     {
 
