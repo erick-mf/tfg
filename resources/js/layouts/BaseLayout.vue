@@ -42,7 +42,7 @@ watch(
         <div class="drawer lg:drawer-open">
             <input id="admin-drawer" type="checkbox" class="drawer-toggle" v-model="drawerOpen" />
             <div class="drawer-content flex flex-col">
-                <header class="bg-base-100 sticky top-0 z-20 flex h-16 items-center justify-between px-6">
+                <header class="bg-base-100 sticky top-0 flex h-16 items-center justify-between px-6">
                     <Hamburguer />
                     <slot name="header"></slot>
                 </header>

@@ -20,7 +20,7 @@ export function validatorUserForm(form, errors, user = null) {
     } else if (form.name.trim().length > 100) {
         errors.value.name = 'El campo nombre debe tener como máximo 100 caracteres.';
         isValid = false;
-    } else if (!/^[a-zA-ZaáéíóúAÁÉÍÓÚñÑ\s]+$/.test(form.name)) {
+    } else if (!/^[\p{L}\s]+$/u.test(form.name)) {
         errors.value.name = 'El campo nombre solo puede contener letras y espacios.';
         isValid = false;
     }
@@ -35,7 +35,7 @@ export function validatorUserForm(form, errors, user = null) {
     } else if (form.surnames.trim().length > 150) {
         errors.value.surnames = 'El campo apellidos debe tener como máximo 150 caracteres.';
         isValid = false;
-    } else if (!/^[a-zA-ZaáéíóúAÁÉÍÓÚñÑ\s]+$/.test(form.surnames)) {
+    } else if (!/^[\p{L}\s]+$/u.test(form.name)) {
         errors.value.surnames = 'El campo apellidos solo puede contener letras y espacios.';
         isValid = false;
     }

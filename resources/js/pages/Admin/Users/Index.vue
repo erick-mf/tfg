@@ -1,4 +1,5 @@
 <script setup>
+import EmptyState from '@/components/EmptyState.vue';
 import Filters from '@/components/Filters.vue';
 import SearchForm from '@/components/SearchForm.vue';
 import SidebarBtn from '@/components/SidebarBtn.vue';
@@ -54,18 +55,21 @@ function handleEditUser(user) {
         </template>
 
         <template #content>
-            <Table
-                :content="users"
-                :columns="columns"
-                emptyMessage="No hay usuarios registrados"
-                @edit-user="handleEditUser"
-            />
-            <UserCard
-                :content="users"
-                :columns="columns"
-                emptyMessage="No hay usuarios registrados"
-                @edit-user="handleEditUser"
-            />
+            <EmptyState v-if="users.data.length === 0" />
+            <div v-else>
+                <Table
+                    :content="users"
+                    :columns="columns"
+                    emptyMessage="No hay usuarios registrados"
+                    @edit-user="handleEditUser"
+                />
+                <UserCard
+                    :content="users"
+                    :columns="columns"
+                    emptyMessage="No hay usuarios registrados"
+                    @edit-user="handleEditUser"
+                />
+            </div>
             <SidebarRight text="Nuevo Empleado">
                 <template #form>
                     <UserForm :user="editingUser" />

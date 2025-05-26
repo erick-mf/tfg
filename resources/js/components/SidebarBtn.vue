@@ -12,7 +12,7 @@ defineProps({
 </script>
 
 <template>
-    <label :for="drawerId" class="btn drawer-button">
+    <label :for="drawerId" class="btn drawer-button text-xs sm:text-sm">
         {{ text }}
     </label>
 </template>

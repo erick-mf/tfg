@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
-    <div class="dropdown dropdown-end">
-        <label tabindex="0" class="btn btn-ghost text-base">
+    <div class="dropdown dropdown-end hidden sm:block">
+        <label tabindex="0" class="btn btn-ghost text-sm">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5"

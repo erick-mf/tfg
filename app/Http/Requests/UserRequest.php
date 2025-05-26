@@ -71,6 +71,7 @@ class UserRequest extends FormRequest
             'password.required' => 'El campo contraseña es obligatorio.',
             'password.string' => 'El campo contraseña debe ser una cadena de texto.',
             'password.size' => 'El campo contraseña debe tener 6 dígitos.',
+            'password.unique' => 'La contraseña ya está en uso.',
 
             'role.required' => 'El campo rol es obligatorio.',
             'role.in' => 'El rol seleccionado no es válido.',

@@ -27,7 +27,7 @@ function handleDelete() {
 </script>
 
 <template>
-    <button class="btn btn-sm btn-ghost text-error" @click="openModal">
+    <button class="btn btn-sm btn-ghost text-error tooltip tooltip-bottom" data-tip="Eliminar" @click="openModal">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
