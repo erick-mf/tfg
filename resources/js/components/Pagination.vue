@@ -23,7 +23,7 @@ function getButtonLabel(label) {
     <div class="bg-base-200 px-4 py-2">
         <div class="flex items-center justify-between text-sm">
             <div>
-                Mostrando <span class="font-medium">{{ pagination.data.length }}</span> de
+                Mostrando <span class="text-sm font-medium sm:text-base">{{ pagination.data.length }}</span> de
                 <span class="font-medium">{{ pagination.total }}</span> registros
             </div>
 
@@ -31,7 +31,7 @@ function getButtonLabel(label) {
                 <template v-for="(link, index) in pagination.links" :key="index">
                     <button
                         v-if="!link.url"
-                        class="join-item btn btn-disabled btn-md"
+                        class="join-item btn btn-disabled btn-sm sm:btn-md"
                         v-html="getButtonLabel(link.label)"
                         disabled
                     ></button>
@@ -40,7 +40,7 @@ function getButtonLabel(label) {
                         v-else
                         :href="link.url"
                         preserve-scroll
-                        class="join-item btn btn-md"
+                        class="join-item btn btn-sm sm:btn-md"
                         :class="{ 'btn-active': link.active }"
                         v-html="getButtonLabel(link.label)"
                     ></Link>
