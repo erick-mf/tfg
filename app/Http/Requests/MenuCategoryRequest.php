@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class LocationRequest extends FormRequest
+class MenuCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,7 +30,7 @@ class LocationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[\p{L}\s]+$/u', Rule::unique('locations')->ignore($this->name, 'name')],
+            'name' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[\p{L}\s]+$/u', Rule::unique('menu_categories')->ignore($this->name, 'name')],
         ];
     }
 

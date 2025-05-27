@@ -1,12 +1,12 @@
 <script setup>
-import { validatorLocationForm } from '@/lib/validatorLocationForm';
+import { validatorMenuCategoryForm } from '@/lib/validatorMenuCategoryForm';
 import { useForm } from '@inertiajs/vue3';
 import { computed, watch } from 'vue';
 import BtnPrimary from './BtnPrimary.vue';
 import BtnSidebarRightCancel from './BtnSidebarRightCancel.vue';
 
 const props = defineProps({
-    location: {
+    menuCategory: {
         type: Object,
         default: null,
     },
@@ -20,12 +20,12 @@ const form = useForm({
 const isEditing = computed(() => !!form.id);
 
 watch(
-    () => props.location,
-    (newLocation) => {
-        if (newLocation?.id) {
+    () => props.menuCategory,
+    (newMenuCategory) => {
+        if (newMenuCategory?.id) {
             Object.assign(form, {
-                id: newLocation.id,
-                name: newLocation.name || '',
+                id: newMenuCategory.id,
+                name: newMenuCategory.name || '',
             });
         } else {
             form.clearErrors();
@@ -36,12 +36,12 @@ watch(
 );
 
 const submitForm = () => {
-    const isValid = validatorLocationForm(form);
+    const isValid = validatorMenuCategoryForm(form);
 
     if (!isValid) return;
 
     if (!isEditing.value) {
-        form.post(route('admin.locations.store'), {
+        form.post(route('admin.categories.store'), {
             onSuccess: () => {
                 form.clearErrors();
                 form.reset();
@@ -50,7 +50,7 @@ const submitForm = () => {
             },
         });
     } else {
-        form.put(route('admin.locations.update', form), {
+        form.put(route('admin.categories.update', form), {
             onSuccess: () => {
                 form.clearErrors();
                 form.reset();
@@ -70,7 +70,7 @@ const cancelForm = () => {
 <template>
     <div class="mx-auto my-8 w-full max-w-md">
         <h2 class="mb-6 text-center text-2xl font-bold">
-            {{ isEditing ? 'Editar ubicación' : 'Crear ubicación' }}
+            {{ isEditing ? 'Editar Categoría' : 'Crear Categoría' }}
         </h2>
 
         <div class="space-y-4">

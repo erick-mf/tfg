@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\MenuCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
@@ -16,6 +16,6 @@ Route::prefix('admin')->middleware('role:admin,encargado')->name('admin.')->grou
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/users', UserController::class);
     Route::resource('/locations', LocationController::class);
-    Route::resource('/categories', CategoryController::class);
+    Route::resource('/categories', MenuCategoryController::class);
     Route::resource('/products', ProductController::class);
 });
