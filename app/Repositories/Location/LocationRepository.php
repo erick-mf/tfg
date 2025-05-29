@@ -15,6 +15,11 @@ class LocationRepository implements LocationRepositoryInterface
         //
     }
 
+    public function all()
+    {
+        return $this->location->all();
+    }
+
     public function paginate(int $perPage = 15)
     {
         return $this->location->paginate($perPage);

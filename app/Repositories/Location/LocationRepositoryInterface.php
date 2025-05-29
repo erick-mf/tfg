@@ -6,6 +6,8 @@ use App\Models\Location;
 
 interface LocationRepositoryInterface
 {
+    public function all();
+
     public function paginate(int $perPage = 15);
 
     public function findById(int $id);

@@ -37,7 +37,7 @@ function deleteMenuCategory(item, action) {
     <BaseLayout>
         <template #header>
             <div class="flex w-full items-center justify-between gap-4">
-                <h1 class="text-base font-semibold sm:text-xl">Lista de Categorias de Menu</h1>
+                <h1 class="text-sm font-semibold sm:text-xl">Lista de Categorias de Menu</h1>
 
                 <SidebarBtn text="Nueva Categoría" />
             </div>
@@ -48,11 +48,11 @@ function deleteMenuCategory(item, action) {
                 <div
                     v-for="(menuCategory, index) in props.menuCategories.data"
                     :key="index"
-                    class="flex items-center justify-between rounded-lg border bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow"
+                    class="bg-base-100 border-base-300 hover:bg-base-200 flex items-center justify-between rounded-lg border py-4 shadow"
                 >
-                    <span class="text-base font-medium text-gray-700">{{ menuCategory.name }}</span>
+                    <span class="pl-4 text-base font-medium text-gray-700">{{ menuCategory.name }}</span>
 
-                    <div class="flex space-x-2">
+                    <div class="flex pr-1">
                         <EditAction @click="handleEditMenuCategory(menuCategory)" />
                         <ConfirmacionDeleteModal
                             :item="menuCategory"

@@ -38,6 +38,9 @@ import UserDropdown from '@/components/UserDropdown.vue';
                 <MenuItem :href="route('admin.categories.index')" :active="$page.url.startsWith('/admin/categories')">
                     Categorias del Menú
                 </MenuItem>
+                <MenuItem :href="route('admin.products.index')" :active="$page.url.startsWith('/admin/products')">
+                    Productos
+                </MenuItem>
             </ul>
             <UserDropdown />
         </div>

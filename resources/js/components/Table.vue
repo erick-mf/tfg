@@ -14,23 +14,24 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    deleteAction: {
+        type: String,
+        required: true,
+        default: '',
+    },
     showActions: {
         type: Boolean,
         default: true,
-    },
-    emptyMessage: {
-        type: String,
-        default: 'No hay datos disponibles',
     },
 });
 
 const data = computed(() => props.content.data);
 const pagination = computed(() => props.content);
 
-const emit = defineEmits(['edit-user']);
+const emit = defineEmits(['edit-item']);
 
 function editItem(item) {
-    emit('edit-user', item);
+    emit('edit-item', item);
 }
 
 function deleteItem(item, action) {
@@ -55,27 +56,44 @@ function deleteItem(item, action) {
 <template>
     <div class="border-base-300 bg-base-100 hidden w-full overflow-x-auto rounded-lg border shadow-sm sm:block">
         <div class="relative h-[calc(100vh-180px)] overflow-y-auto">
-            <table class="table-zebra table w-full">
+            <table class="table w-full">
                 <thead class="bg-base-200 sticky top-0">
                     <tr>
-                        <th v-for="(column, index) in columns" :key="index">{{ column.label }}</th>
-                        <th v-if="showActions">Acciones</th>
+                        <th
+                            v-for="(column, index) in columns"
+                            :key="index"
+                            class="px-4 py-3 text-left whitespace-nowrap"
+                            :class="{
+                                'min-w-[120px]': columns.length <= 4,
+                                'min-w-[80px]': columns.length > 4,
+                            }"
+                        >
+                            {{ column.label }}
+                        </th>
+                        <th v-if="showActions" class="w-24 px-4 py-3 text-center whitespace-nowrap">Acciones</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr class="hover:bg-base-300" v-for="(item, itemIndex) in data" :key="itemIndex">
-                        <td v-for="(column, colIndex) in columns" :key="colIndex">
-                            <p v-if="item[column.field] === null">No disponible</p>
-                            <p v-else>{{ item[column.field] }}</p>
+                        <td
+                            v-for="(column, colIndex) in columns"
+                            :key="colIndex"
+                            class="max-w-[300px] overflow-hidden px-4 py-3 text-ellipsis"
+                            :title="item[column.field]"
+                        >
+                            <p v-if="item[column.field] === null" class="text-base-content/50">No disponible</p>
+                            <p v-else class="truncate">
+                                {{ item[column.field] }}
+                            </p>
                         </td>
 
-                        <td v-if="showActions">
-                            <div class="flex gap-2">
+                        <td v-if="showActions" class="px-4 py-3 text-center">
+                            <div class="flex justify-center gap-2">
                                 <EditAction @click="editItem(item)" />
                                 <ConfirmationDeleteModal
                                     :item="item"
-                                    :action="'admin.users.destroy'"
+                                    :action="props.deleteAction"
                                     @delete="deleteItem"
                                 />
                             </div>

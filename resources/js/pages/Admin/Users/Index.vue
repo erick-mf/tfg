@@ -44,7 +44,7 @@ function handleEditUser(user) {
     <BaseLayout>
         <template #header>
             <div class="flex w-full items-center justify-between gap-4">
-                <h1 class="text-base font-semibold sm:text-xl">Lista de Usuarios</h1>
+                <h1 class="text-sm font-semibold sm:text-xl">Lista de Usuarios</h1>
 
                 <div class="flex items-center gap-3">
                     <SearchForm />
@@ -60,15 +60,10 @@ function handleEditUser(user) {
                 <Table
                     :content="users"
                     :columns="columns"
-                    emptyMessage="No hay usuarios registrados"
-                    @edit-user="handleEditUser"
+                    :deleteAction="'admin.users.destroy'"
+                    @edit-item="handleEditUser"
                 />
-                <UserCard
-                    :content="users"
-                    :columns="columns"
-                    emptyMessage="No hay usuarios registrados"
-                    @edit-user="handleEditUser"
-                />
+                <UserCard :content="users" :deleteAction="'admin.users.destroy'" @edit-item="handleEditUser" />
             </div>
             <SidebarRight text="Nuevo Empleado">
                 <template #form>
