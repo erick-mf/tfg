@@ -23,7 +23,6 @@ const limitedLinks = computed(() => {
     if (!props.pagination?.links) return [];
 
     const links = props.pagination.links;
-    const currentPage = props.pagination.current_page;
 
     if (links.length <= 7) {
         return links;

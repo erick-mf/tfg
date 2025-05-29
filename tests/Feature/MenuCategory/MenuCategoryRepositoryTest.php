@@ -84,7 +84,7 @@ test('delete menu category successfully', function () {
 
 test('delete non-existent menu category throws exception', function () {
     $menuCategory = MenuCategory::factory()->create();
-    $menuCategory->delete();
+    $menuCategory->forceDelete();
 
     expect(fn () => $this->repository->delete($menuCategory))
         ->toThrow(RuntimeException::class);
