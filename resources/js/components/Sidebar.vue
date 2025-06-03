@@ -4,7 +4,7 @@ import UserDropdown from '@/components/UserDropdown.vue';
 </script>
 
 <template>
-    <div class="drawer-side">
+    <div class="drawer-side z-5">
         <label for="admin-drawer" class="drawer-overlay"></label>
         <div class="menu bg-base-200 text-base-content min-h-full w-76 p-4">
             <div class="mb-4 flex items-center p-4">
@@ -40,6 +40,9 @@ import UserDropdown from '@/components/UserDropdown.vue';
                 </MenuItem>
                 <MenuItem :href="route('admin.products.index')" :active="$page.url.startsWith('/admin/products')">
                     Productos
+                </MenuItem>
+                <MenuItem :href="route('admin.menu-items.index')" :active="$page.url.startsWith('/admin/menu-items')">
+                    Items del Menú
                 </MenuItem>
             </ul>
             <UserDropdown />

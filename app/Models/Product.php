@@ -35,7 +35,7 @@ class Product extends Model
 
     public function getLocationNameAttribute()
     {
-        return $this->location->name;
+        return $this->location->name ?? 'Sin ubicación';
     }
 
     public function getStatusAttribute()

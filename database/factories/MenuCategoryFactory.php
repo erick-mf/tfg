@@ -27,6 +27,7 @@ class MenuCategoryFactory extends Factory
                 'Vegano',
                 'Infantil',
                 'Especialidades',
+                'Cafe',
             ]),
         ];
     }

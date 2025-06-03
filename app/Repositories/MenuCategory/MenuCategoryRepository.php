@@ -14,6 +14,18 @@ class MenuCategoryRepository implements MenuCategoryRepositoryInterface
      */
     public function __construct(private MenuCategory $menuCategory) {}
 
+    public function all()
+    {
+        try {
+            return $this->menuCategory->all();
+
+        } catch (Exception $e) {
+            Log::error('Error getting menu categories: '.$e->getMessage());
+
+            throw new RuntimeException('Error al obtener las categorías');
+        }
+    }
+
     public function paginate(int $perPage = 10)
     {
         try {

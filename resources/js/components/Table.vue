@@ -57,7 +57,7 @@ function deleteItem(item, action) {
     <div class="border-base-300 bg-base-100 hidden w-full overflow-x-auto rounded-lg border shadow-sm sm:block">
         <div class="relative h-[calc(100vh-180px)] overflow-y-auto">
             <table class="table w-full">
-                <thead class="bg-base-200 sticky top-0">
+                <thead class="bg-base-200 sticky top-0 z-1">
                     <tr>
                         <th
                             v-for="(column, index) in columns"
@@ -83,6 +83,12 @@ function deleteItem(item, action) {
                             :title="item[column.field]"
                         >
                             <p v-if="item[column.field] === null" class="text-base-content/50">No disponible</p>
+                            <img
+                                v-else-if="column.field === 'image_url'"
+                                :src="item[column.field]"
+                                :alt="item.name"
+                                class="h-15 w-14 object-cover"
+                            />
                             <p v-else class="truncate">
                                 {{ item[column.field] }}
                             </p>
