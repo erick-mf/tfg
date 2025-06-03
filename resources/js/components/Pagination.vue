@@ -43,7 +43,7 @@ const limitedLinks = computed(() => {
 </script>
 
 <template>
-    <div class="bg-base-200 mt-4 px-4 py-2">
+    <div class="bg-base-200 mt-4 flex-shrink-0 px-4 py-2">
         <div class="flex flex-col items-center justify-between gap-3 text-sm sm:flex-row">
             <div class="order-2 sm:order-1">
                 Mostrando <span class="text-sm font-medium sm:text-base">{{ props.pagination.data.length }}</span> de

@@ -15,7 +15,6 @@ const displayToast = () => {
         showToast.value = true;
         toastMessage.value = page.props.flash.toast.message;
         toastType.value = page.props.flash.toast.type || 'info';
-
         setTimeout(() => {
             showToast.value = false;
         }, 3000);
@@ -41,22 +40,22 @@ watch(
     <div class="bg-base-100 min-h-screen">
         <div class="drawer lg:drawer-open">
             <input id="admin-drawer" type="checkbox" class="drawer-toggle" v-model="drawerOpen" />
-            <div class="drawer-content flex flex-col">
-                <header class="bg-base-100 sticky top-0 flex h-16 items-center justify-between px-6">
+            <div class="drawer-content flex h-screen flex-col">
+                <header
+                    class="bg-base-100 border-base-300 sticky top-0 z-4 flex h-16 flex-shrink-0 items-center justify-between border-b px-6"
+                >
                     <Hamburguer />
                     <slot name="header"></slot>
                 </header>
-                <main class="flex-1 p-6">
-                    <div class="prose max-w-none">
-                        <slot name="content"></slot>
-                    </div>
+                <main class="flex min-h-0 flex-1 flex-col p-6">
+                    <slot name="content"></slot>
                 </main>
             </div>
             <Sidebar />
         </div>
     </div>
 
-    <div class="toast toast-end fixed z-50 text-base" v-if="showToast">
+    <div class="toast toast-end fixed z-[100] text-base" v-if="showToast">
         <div :class="[`alert`, `alert-${toastType}`]">
             <span>{{ toastMessage }}</span>
         </div>

@@ -28,7 +28,7 @@ function handleDelete() {
 </script>
 
 <template>
-    <button class="btn btn-sm btn-ghost text-error tooltip tooltip-bottom" data-tip="Eliminar" @click="openModal">
+    <button class="btn btn-sm btn-link tooltip tooltip-bottom text-red-500" data-tip="Eliminar" @click="openModal">
         <Trash2 class="h-5 w-5" />
     </button>
 

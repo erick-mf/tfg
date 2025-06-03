@@ -27,7 +27,8 @@ function handleEditLocation(location) {
 }
 
 function deleteLocation(item, action) {
-    router.delete(route(`${action}`, item), {
+    const currentPage = new URLSearchParams(window.location.search).get('page') || 1;
+    router.delete(route(`${action}`, { ...item, page: currentPage }), {
         preserveScroll: true,
     });
 }
@@ -43,30 +44,42 @@ function deleteLocation(item, action) {
             </div>
         </template>
         <template #content>
-            <EmptyState v-if="props.locations.data.length == 0" />
-            <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <div
-                    v-for="(location, index) in props.locations.data"
-                    :key="index"
-                    class="bg-base-100 border-base-300 hover:bg-base-200 flex items-center justify-between rounded-lg border py-4 shadow"
-                >
-                    <span class="pl-4 text-base font-medium text-gray-700">{{ location.name }}</span>
+            <div class="flex h-full w-full flex-col">
+                <EmptyState v-if="!props.locations.data || props.locations.data.length == 0" class="m-auto flex-grow" />
+                <div v-else class="flex h-full w-full flex-col">
+                    <div class="flex-1 overflow-y-auto pb-4">
+                        <div class="grid grid-cols-1 gap-4 p-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            <div
+                                v-for="(location, index) in props.locations.data"
+                                :key="location.id || index"
+                                class="group bg-base-200/50 hover:bg-base-200 relative flex h-20 items-center justify-between rounded-lg border-2 px-4 py-3"
+                            >
+                                <div class="flex min-w-0 flex-1 flex-col">
+                                    <div class="truncate text-lg text-gray-800">
+                                        {{ location.name }}
+                                    </div>
+                                </div>
 
-                    <div class="flex pr-1">
-                        <EditAction @click="handleEditLocation(location)" />
-                        <ConfirmacionDeleteModal
-                            :item="location"
-                            :action="'admin.locations.destroy'"
-                            @delete="deleteLocation"
-                        />
+                                <div class="relative ml-2 flex items-center gap-1">
+                                    <EditAction @click="handleEditLocation(location)" />
+                                    <ConfirmacionDeleteModal
+                                        :item="location"
+                                        :action="'admin.locations.destroy'"
+                                        @delete="deleteLocation"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <Pagination :pagination="props.locations" />
                 </div>
+                <SidebarRight text="Nueva Ubicación">
+                    <template #form>
+                        <LocationForm :location="editLocation" />
+                    </template>
+                </SidebarRight>
             </div>
-            <SidebarRight text="Nueva Ubicación">
-                <template #form>
-                    <LocationForm :location="editLocation" />
-                </template>
-            </SidebarRight>
         </template>
     </BaseLayout>
 </template>

@@ -37,17 +37,14 @@ const errors = ref({
     password: '',
 });
 
-// Computed para saber si es edición
 const isEditing = computed(() => !!form.id);
 
-// Función para resetear errores
 const resetErrors = () => {
     Object.keys(errors.value).forEach((key) => {
         errors.value[key] = '';
     });
 };
 
-// Función para cerrar sidebar y limpiar
 const closeSidebarAndReset = () => {
     const sidebarRight = document.getElementById('sidebar-right');
     if (sidebarRight) sidebarRight.checked = false;
@@ -59,7 +56,6 @@ watch(
     () => props.user,
     (newUser) => {
         if (newUser?.id) {
-            // Usar Object.assign para mayor claridad
             Object.assign(form, {
                 id: newUser.id,
                 name: newUser.name || '',
@@ -67,7 +63,7 @@ watch(
                 phone: newUser.phone || '',
                 phone_emergency: newUser.phone_emergency || '',
                 role: newUser.role || '',
-                password: '', // Siempre vacío en edición
+                password: '',
             });
         } else {
             form.reset();
@@ -88,7 +84,6 @@ const submitForm = () => {
     };
 
     if (isEditing.value) {
-        // En edición, eliminar password si está vacío
         const updateData = { ...form.data() };
         if (!updateData.password || !updateData.password.trim()) {
             delete updateData.password;
@@ -96,7 +91,6 @@ const submitForm = () => {
 
         form.transform(() => updateData).put(route('admin.users.update', form.id), successCallback);
     } else {
-        // Creación - enviar todos los datos
         form.post(route('admin.users.store'), successCallback);
     }
 };

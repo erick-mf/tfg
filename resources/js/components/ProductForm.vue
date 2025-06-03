@@ -23,7 +23,6 @@ const form = useForm({
     location_id: '',
 });
 
-// Computed para saber si es edición
 const isEditing = computed(() => !!form.id);
 
 watch(
@@ -71,7 +70,6 @@ const submitForm = () => {
 };
 
 const cancelForm = () => {
-    console.log(props.product);
     form.clearErrors();
     form.reset();
 };

@@ -19,7 +19,6 @@ const props = defineProps({
 
 const data = computed(() => props.content.data);
 const pagination = computed(() => props.content);
-
 const emit = defineEmits(['edit-item']);
 
 function editItem(item) {
@@ -39,47 +38,56 @@ function deleteItem(itemFromModal, actionRouteName) {
             <div
                 v-for="item in data"
                 :key="item.id"
-                class="card bg-base-100 border-base-200/70 hover:border-primary/20 border shadow-sm transition-all duration-200 hover:shadow-md"
+                class="rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md"
             >
-                <figure v-if="item.image_url" class="h-48 w-full overflow-hidden bg-gray-200">
-                    <img :src="item.image_url" :alt="item.name" class="h-full w-full object-cover" />
-                </figure>
-
-                <div class="card-body p-4">
-                    <div class="flex items-start justify-between">
-                        <div class="min-w-0 flex-1">
-                            <h3 class="text-base-content mb-1 truncate text-lg font-semibold">
-                                {{ item.name }}
-                            </h3>
-                            <div class="text-base-content/80 mb-1 flex items-center gap-1.5 text-sm">
-                                <span class="text-base-content/60 text-sm">Precio:</span>
-                                <span class="font-semibold">{{ item.formated_price }}</span>
-                            </div>
-                            <div
-                                v-if="item.menu_category_id"
-                                class="text-base-content/70 flex items-center gap-1.5 text-xs"
-                            >
-                                <span class="text-base-content/60 text-sm">Categoría:</span>
-                                <span class="font-semibold">{{ item.category_name }}</span>
-                            </div>
-                        </div>
+                <div class="flex h-28">
+                    <!-- Imagen -->
+                    <div v-if="item.image_url" class="h-28 w-28 flex-shrink-0">
+                        <img :src="item.image_url" :alt="item.name" class="h-full w-full rounded-l-lg object-cover" />
                     </div>
 
-                    <div class="mt-4 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <component
-                                :is="item.is_available ? CircleCheck : CircleX"
-                                class="h-5 w-5"
-                                :class="item.is_available ? 'text-success' : 'text-error'"
-                            />
-                            <span class="font-semibold" :class="item.is_available ? 'text-success' : 'text-error'">
-                                {{ item.status }}
-                            </span>
-                        </div>
+                    <!-- Contenido principal -->
+                    <div class="min-w-0 flex-1 p-3">
+                        <div class="mb-2 flex items-start justify-between">
+                            <div class="min-w-0 flex-1 pr-2">
+                                <h3 class="mb-1 line-clamp-2 text-sm leading-tight font-semibold text-gray-900">
+                                    {{ item.name }}
+                                </h3>
 
-                        <div class="flex items-center gap-2">
-                            <EditAction @click="editItem(item)" />
-                            <ConfirmationDeleteModal :item="item" :action="deleteAction" @delete="deleteItem" />
+                                <div class="space-y-1.5">
+                                    <div class="flex items-center text-xs text-gray-600">
+                                        <span class="mr-1 font-medium">Precio:</span>
+                                        <span class="font-semibold text-blue-600">{{ item.formated_price }}</span>
+                                    </div>
+
+                                    <div v-if="item.menu_category_id" class="w-full text-xs text-gray-600">
+                                        <span class="font-medium">Categoría:</span>
+                                        <span class="ml-1 font-medium">{{ item.category_name }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status y acciones -->
+                            <div class="flex flex-col items-end gap-2">
+                                <div class="flex items-center gap-1">
+                                    <component
+                                        :is="item.is_available ? CircleCheck : CircleX"
+                                        class="h-4 w-4"
+                                        :class="item.is_available ? 'text-green-600' : 'text-red-600'"
+                                    />
+                                    <span
+                                        class="text-xs font-medium whitespace-nowrap"
+                                        :class="item.is_available ? 'text-green-600' : 'text-red-600'"
+                                    >
+                                        {{ item.status }}
+                                    </span>
+                                </div>
+
+                                <div class="flex items-center gap-1">
+                                    <EditAction @click="editItem(item)" />
+                                    <ConfirmationDeleteModal :item="item" :action="deleteAction" @delete="deleteItem" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
