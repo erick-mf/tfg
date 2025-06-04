@@ -10,6 +10,8 @@ use App\Repositories\MenuItem\MenuItemRepository;
 use App\Repositories\MenuItem\MenuItemRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Table\TableRepository;
+use App\Repositories\Table\TableRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +28,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MenuCategoryRepositoryInterface::class, MenuCategoryRepository::class);
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind(MenuItemRepositoryInterface::class, MenuItemRepository::class);
+        $this->app->bind(TableRepositoryInterface::class, TableRepository::class);
     }
 
     /**

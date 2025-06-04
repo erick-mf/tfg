@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -20,4 +21,5 @@ Route::prefix('admin')->middleware('role:admin,encargado')->name('admin.')->grou
     Route::resource('/categories', MenuCategoryController::class);
     Route::resource('/products', ProductController::class);
     Route::resource('/menu-items', MenuItemController::class);
+    Route::resource('/tables', TableController::class);
 });
