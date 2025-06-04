@@ -29,6 +29,16 @@ class MenuItemController extends Controller
             $menuItems = $this->menuItemRepository->paginate();
             $categories = $this->menuCategoryRepository->all();
 
+            if ($menuItems->isEmpty() && $menuItems->currentPage() > 1) {
+                $targetPage = $menuItems->lastPage() > 0 ? $menuItems->lastPage() : 1;
+                if ($targetPage == $menuItems->currentPage() && $targetPage > 1) {
+                    $targetPage--;
+                }
+                $targetPage = max(1, $targetPage);
+
+                return redirect()->route('admin.menu-items.index', ['page' => $targetPage]);
+            }
+
             return Inertia::render('Admin/MenuItem', compact('menuItems', 'categories'));
         } catch (Exception $e) {
             return redirect()->back()->with('toast', ['type' => 'error', 'message' => $e->getMessage()]);

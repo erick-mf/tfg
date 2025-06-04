@@ -17,7 +17,7 @@ class ProductRepository implements ProductRepositoryInterface
     public function paginate(int $perPage = 10)
     {
         try {
-            return $this->product->with('location')->paginate($perPage);
+            return $this->product->with('location')->orderBy('id', 'asc')->paginate($perPage);
 
         } catch (Exception $e) {
             Log::error('Error paginating products: '.$e->getMessage());

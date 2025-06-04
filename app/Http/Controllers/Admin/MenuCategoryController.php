@@ -21,6 +21,16 @@ class MenuCategoryController extends Controller
         try {
             $menuCategories = $this->menuCategoryRepository->paginate();
 
+            if ($menuCategories->isEmpty() && $menuCategories->currentPage() > 1) {
+                $targetPage = $menuCategories->lastPage() > 0 ? $menuCategories->lastPage() : 1;
+                if ($targetPage == $menuCategories->currentPage() && $targetPage > 1) {
+                    $targetPage--;
+                }
+                $targetPage = max(1, $targetPage);
+
+                return redirect()->route('admin.categories.index', ['page' => $targetPage]);
+            }
+
             return Inertia::render('Admin/MenuCategory', compact('menuCategories'));
         } catch (Exception $e) {
             return redirect()->back()->with('toast', ['type' => 'error', 'message' => $e->getMessage()]);

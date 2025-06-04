@@ -28,6 +28,7 @@ function editItem(item) {
 function deleteItem(itemFromModal, actionRouteName) {
     router.delete(route(actionRouteName, itemFromModal.id), {
         preserveScroll: true,
+        preserveState: false,
     });
 }
 </script>

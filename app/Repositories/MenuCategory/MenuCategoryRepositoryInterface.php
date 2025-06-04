@@ -8,7 +8,7 @@ interface MenuCategoryRepositoryInterface
 {
     public function all();
 
-    public function paginate(int $perPage = 10);
+    public function paginate(int $perPage = 24);
 
     public function findById(int $id);
 

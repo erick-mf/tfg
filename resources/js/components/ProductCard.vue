@@ -25,6 +25,7 @@ function editItem(item) {
 function deleteItem(item, action) {
     router.delete(route(`${action}`, item), {
         preserveScroll: true,
+        preserveState: false,
     });
 }
 </script>

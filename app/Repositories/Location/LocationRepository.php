@@ -20,9 +20,9 @@ class LocationRepository implements LocationRepositoryInterface
         return $this->location->all();
     }
 
-    public function paginate(int $perPage = 15)
+    public function paginate(int $perPage = 24)
     {
-        return $this->location->paginate($perPage);
+        return $this->location->orderBy('id', 'asc')->paginate($perPage);
     }
 
     public function findById(int $id)

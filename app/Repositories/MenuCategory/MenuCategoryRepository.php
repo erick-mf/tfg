@@ -26,10 +26,10 @@ class MenuCategoryRepository implements MenuCategoryRepositoryInterface
         }
     }
 
-    public function paginate(int $perPage = 10)
+    public function paginate(int $perPage = 24)
     {
         try {
-            return $this->menuCategory->paginate($perPage);
+            return $this->menuCategory->orderBy('id', 'asc')->paginate($perPage);
 
         } catch (Exception $e) {
             Log::error('Error paginating menu categories: '.$e->getMessage());

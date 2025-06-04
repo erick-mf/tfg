@@ -29,7 +29,7 @@ class MenuItemRepository implements MenuItemRepositoryInterface
     public function paginate(int $perPage = 7)
     {
         try {
-            return $this->menuItem->with('category')->paginate($perPage);
+            return $this->menuItem->with('category')->orderBy('id', 'asc')->paginate($perPage);
 
         } catch (Exception $e) {
             Log::error('Error paginating menu items: '.$e->getMessage());

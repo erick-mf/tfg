@@ -3,6 +3,7 @@ import ConfirmacionDeleteModal from '@/components/ConfirmationDeleteModal.vue';
 import EditAction from '@/components/EditAction.vue';
 import EmptyState from '@/components/EmptyState.vue';
 import LocationForm from '@/components/LocationForm.vue';
+import Pagination from '@/components/Pagination.vue';
 import SidebarBtn from '@/components/SidebarBtn.vue';
 import SidebarRight from '@/components/SidebarRight.vue';
 import BaseLayout from '@/layouts/BaseLayout.vue';
@@ -27,9 +28,9 @@ function handleEditLocation(location) {
 }
 
 function deleteLocation(item, action) {
-    const currentPage = new URLSearchParams(window.location.search).get('page') || 1;
-    router.delete(route(`${action}`, { ...item, page: currentPage }), {
+    router.delete(route(`${action}`, item), {
         preserveScroll: true,
+        preserveState: false,
     });
 }
 </script>

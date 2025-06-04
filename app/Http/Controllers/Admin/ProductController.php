@@ -26,6 +26,16 @@ class ProductController extends Controller
             $products = $this->productRepository->paginate();
             $locations = $this->locationRepository->all();
 
+            if ($products->isEmpty() && $products->currentPage() > 1) {
+                $targetPage = $products->lastPage() > 0 ? $products->lastPage() : 1;
+                if ($targetPage == $products->currentPage() && $targetPage > 1) {
+                    $targetPage--;
+                }
+                $targetPage = max(1, $targetPage);
+
+                return redirect()->route('admin.products.index', ['page' => $targetPage]);
+            }
+
             return Inertia::render('Product', compact('products', 'locations'));
         } catch (Exception $e) {
             return redirect()->back()->with('toast', ['type' => 'error', 'message' => $e->getMessage()]);

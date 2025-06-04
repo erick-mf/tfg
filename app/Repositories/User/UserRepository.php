@@ -11,7 +11,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function paginate(int $perPage = 10)
     {
-        return $this->user->whereNot('role', 'admin')->paginate($perPage);
+        return $this->user->whereNot('role', 'admin')->orderBy('id', 'asc')->paginate($perPage);
     }
 
     public function findById($id)

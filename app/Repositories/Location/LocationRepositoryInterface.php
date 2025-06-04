@@ -8,7 +8,7 @@ interface LocationRepositoryInterface
 {
     public function all();
 
-    public function paginate(int $perPage = 15);
+    public function paginate(int $perPage = 24);
 
     public function findById(int $id);
 

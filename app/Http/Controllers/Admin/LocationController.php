@@ -7,6 +7,7 @@ use App\Http\Requests\LocationRequest;
 use App\Models\Location;
 use App\Repositories\Location\LocationRepositoryInterface;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -17,9 +18,19 @@ class LocationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $locations = $this->locationRepository->paginate();
+
+        if ($locations->isEmpty() && $locations->currentPage() > 1) {
+            $targetPage = $locations->lastPage() > 0 ? $locations->lastPage() : 1;
+            if ($targetPage == $locations->currentPage() && $targetPage > 1) {
+                $targetPage--;
+            }
+            $targetPage = max(1, $targetPage);
+
+            return redirect()->route('admin.locations.index', ['page' => $targetPage]);
+        }
 
         return Inertia::render('Admin/Location', compact('locations'));
     }

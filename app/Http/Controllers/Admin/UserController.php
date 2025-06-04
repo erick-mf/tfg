@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -17,9 +18,19 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $users = $this->repository->paginate();
+
+        if ($users->isEmpty() && $users->currentPage() > 1) {
+            $targetPage = $users->lastPage() > 0 ? $users->lastPage() : 1;
+            if ($targetPage == $users->currentPage() && $targetPage > 1) {
+                $targetPage--;
+            }
+            $targetPage = max(1, $targetPage);
+
+            return redirect()->route('admin.users.index', ['page' => $targetPage]);
+        }
 
         return Inertia::render('Admin/Users/Index', compact('users'));
     }
