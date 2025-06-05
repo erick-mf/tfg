@@ -17,7 +17,7 @@ class TableRepository implements TableRepositoryInterface
     public function all()
     {
         try {
-            return $this->table->all();
+            return $this->table->orderBy('id', 'asc')->get();
 
         } catch (Exception $e) {
             Log::error('Error getting tables: '.$e->getMessage());
@@ -63,7 +63,7 @@ class TableRepository implements TableRepositoryInterface
         } catch (Exception $e) {
             Log::error('Error creating table: '.$e->getMessage());
 
-            throw new RuntimeException('Error al crear la mesa: '.$e->getMessage());
+            throw new RuntimeException('Error al crear la mesa');
         }
     }
 
@@ -80,7 +80,7 @@ class TableRepository implements TableRepositoryInterface
         } catch (Exception $e) {
             Log::error('Error updating table: '.$e->getMessage());
 
-            throw new RuntimeException('Error al actualizar la mesa: '.$e->getMessage());
+            throw new RuntimeException('Error al actualizar la mesa');
         }
     }
 
@@ -97,7 +97,21 @@ class TableRepository implements TableRepositoryInterface
         } catch (Exception $e) {
             Log::error('Error deleting table: '.$e->getMessage());
 
-            throw new RuntimeException('Error al eliminar la mesa: '.$e->getMessage());
+            throw new RuntimeException('Error al eliminar la mesa');
+        }
+    }
+
+    public function changeStatus(int $id, string $status)
+    {
+        try {
+            $table = $this->findById($id);
+            $table->status = $status;
+            $table->save();
+
+            return $table;
+        } catch (Exception $e) {
+            Log::error('Error changing table status: '.$e->getMessage());
+            throw new RuntimeException('Error al cambiar el estado de la mesa');
         }
     }
 }

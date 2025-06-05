@@ -78,10 +78,10 @@ test('name must be unique in creation', function () {
 });
 
 test('name unique rule ignores current id during update', function () {
-    $item = Table::factory()->create();
+    $item = Table::factory()->create(['name' => 'Mesa 1']);
 
     $rules = [
-        'name' => ['required', 'min:3', 'max:50', 'regex:/^[a-zA-Z0-9\s]+$/', \Illuminate\Validation\Rule::unique('tables')->ignore($item->id)],
+        'name' => ['required', 'min:3', 'max:50', 'regex:/^[a-zA-Z0-9\s]+$/', \Illuminate\Validation\Rule::unique('tables')->ignore($item->name, 'name')],
         'status' => ['required', 'in:disponible,ocupada,reservada,en limpieza'],
     ];
 

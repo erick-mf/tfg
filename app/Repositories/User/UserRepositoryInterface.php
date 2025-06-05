@@ -6,6 +6,8 @@ use App\Models\User;
 
 interface UserRepositoryInterface
 {
+    public function all();
+
     public function paginate(int $perPage = 10);
 
     public function findById($id);

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MenuCategoryController;
 use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\LoginController;
@@ -22,4 +23,5 @@ Route::prefix('admin')->middleware('role:admin,encargado')->name('admin.')->grou
     Route::resource('/products', ProductController::class);
     Route::resource('/menu-items', MenuItemController::class);
     Route::resource('/tables', TableController::class);
+    Route::resource('/orders', OrderController::class)->except('create', 'show', 'store');
 });

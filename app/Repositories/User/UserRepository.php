@@ -9,6 +9,15 @@ class UserRepository implements UserRepositoryInterface
 {
     public function __construct(private readonly User $user) {}
 
+    public function all()
+    {
+        try {
+            return $this->user->whereNot('role', 'admin')->whereNot('role', 'encargado')->orderBy('id', 'asc')->get();
+        } catch (Exception $e) {
+            throw new Exception('Error getting users');
+        }
+    }
+
     public function paginate(int $perPage = 10)
     {
         return $this->user->whereNot('role', 'admin')->orderBy('id', 'asc')->paginate($perPage);

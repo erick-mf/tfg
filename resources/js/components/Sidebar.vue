@@ -47,6 +47,9 @@ import UserDropdown from '@/components/UserDropdown.vue';
                 <MenuItem :href="route('admin.tables.index')" :active="$page.url.startsWith('/admin/tables')">
                     Mesas
                 </MenuItem>
+                <MenuItem :href="route('admin.orders.index')" :active="$page.url.startsWith('/admin/orders')">
+                    Pedidos
+                </MenuItem>
             </ul>
             <UserDropdown />
         </div>

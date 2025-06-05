@@ -17,4 +17,6 @@ interface TableRepositoryInterface
     public function update(array $data, Table $table);
 
     public function delete(Table $table);
+
+    public function changeStatus(int $id, string $status);
 }

@@ -30,7 +30,7 @@ class TableRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'min:3', 'max:50', 'regex:/^[a-zA-Z0-9\s]+$/', Rule::unique('tables')->ignore($this->id)],
+            'name' => ['required', 'min:3', 'max:50', 'regex:/^[a-zA-Z0-9\s]+$/', Rule::unique('tables')->ignore($this->name, 'name')],
             'status' => ['required', 'in:disponible,ocupada,reservada,en limpieza'],
         ];
     }
