@@ -17,7 +17,7 @@ class MenuItemRepository implements MenuItemRepositoryInterface
     public function all()
     {
         try {
-            return $this->menuItem->with('category')->get();
+            return $this->menuItem->with('menuCategory')->get();
 
         } catch (Exception $e) {
             Log::error('Error getting menu items: '.$e->getMessage());
@@ -29,7 +29,7 @@ class MenuItemRepository implements MenuItemRepositoryInterface
     public function paginate(int $perPage = 7)
     {
         try {
-            return $this->menuItem->with('category')->orderBy('id', 'asc')->paginate($perPage);
+            return $this->menuItem->with('menuCategory')->orderBy('id', 'asc')->paginate($perPage);
 
         } catch (Exception $e) {
             Log::error('Error paginating menu items: '.$e->getMessage());
@@ -41,7 +41,7 @@ class MenuItemRepository implements MenuItemRepositoryInterface
     public function findById(int $id)
     {
         try {
-            return $this->menuItem->with('category')->find($id);
+            return $this->menuItem->with('menuCategory')->find($id);
 
         } catch (Exception $e) {
             Log::error('Error finding menu item: '.$e->getMessage());
@@ -99,5 +99,10 @@ class MenuItemRepository implements MenuItemRepositoryInterface
 
             throw new RuntimeException('Error al eliminar el menú: '.$e->getMessage());
         }
+    }
+
+    public function getMenuItemsAvailable()
+    {
+        return $this->menuItem->with('menuCategory')->where('is_available', true)->get();
     }
 }

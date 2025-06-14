@@ -10,6 +10,8 @@ use App\Repositories\MenuItem\MenuItemRepository;
 use App\Repositories\MenuItem\MenuItemRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
 use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\OrderItem\OrderItemRepository;
+use App\Repositories\OrderItem\OrderItemRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Table\TableRepository;
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MenuItemRepositoryInterface::class, MenuItemRepository::class);
         $this->app->bind(TableRepositoryInterface::class, TableRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
     }
 
     /**

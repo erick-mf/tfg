@@ -9,7 +9,7 @@ import Table from '@/components/Table.vue';
 import BaseLayout from '@/layouts/BaseLayout.vue';
 import { ref } from 'vue';
 
-defineProps({
+const props = defineProps({
     orders: {
         type: Object,
     },
@@ -18,6 +18,9 @@ defineProps({
     },
     tables: {
         type: Object,
+    },
+    menuItems: {
+        type: Array,
     },
 });
 
@@ -37,11 +40,11 @@ function handleEditOrder(order) {
         id: order.id,
         status: order.status,
         payment_method: order.payment_method,
-        paid_at: order.paid_at,
         user_id: order.user_id,
         table_id: order.table_id,
         formated_total: order.formated_total,
         formated_paid_at: order.formated_paid_at,
+        order_items: order.order_items,
     };
     const sidebarRight = document.getElementById('sidebar-right');
     if (sidebarRight) sidebarRight.checked = true;
@@ -74,7 +77,13 @@ function handleEditOrder(order) {
             </div>
             <SidebarRight>
                 <template #form>
-                    <OrderForm :order="editingOrder" :users="users" :tables="tables" />
+                    <OrderForm
+                        v-if="editingOrder"
+                        :order="editingOrder"
+                        :users="users"
+                        :tables="tables"
+                        :menuItems="menuItems"
+                    />
                 </template>
             </SidebarRight>
         </template>

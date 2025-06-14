@@ -1,200 +1,125 @@
 <script setup>
 import BtnPrimary from '@/components/BtnPrimary.vue';
 import BtnSidebarRightCancel from '@/components/BtnSidebarRightCancel.vue';
+import OrderDetails from '@/components/OrderDetails.vue';
+import OrderItems from '@/components/OrderItems.vue';
 import { useForm } from '@inertiajs/vue3';
-import { computed, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
-    order: {
-        type: Object,
-        default: null,
-    },
-    users: {
-        type: Object,
-        default: null,
-    },
-    tables: {
-        type: Object,
-        default: null,
-    },
+    order: { type: Object, required: true },
+    users: { type: Array, required: true },
+    tables: { type: Array, required: true },
+    menuItems: { type: Array, required: true },
 });
+
+const emit = defineEmits(['form-cancelled', 'form-submitted-successfully']);
+
+const activeTab = ref('order');
 
 const form = useForm({
     id: null,
     status: '',
     payment_method: '',
-    paid_at: '',
     user_id: '',
     table_id: '',
+    items: [],
 });
 
-const isEditing = computed(() => !!form.id);
-
-const availableTables = computed(() => {
-    let availables = props.tables.filter((table) => table.status === 'disponible');
-    if (form.table_id) {
-        const selectedTable = props.tables.find((table) => table.id == form.table_id);
-
-        if (selectedTable && !availables.some((table) => table.id == selectedTable.id)) {
-            availables.push(selectedTable);
-        }
-    }
-
-    return availables;
-});
+function calculateSubtotal(item) {
+    const price = parseFloat(item.unit_price) || 0;
+    const quantity = parseInt(item.quantity) || 0;
+    return parseFloat((quantity * price).toFixed(2));
+}
 
 watch(
     () => props.order,
     (newOrder) => {
         if (newOrder?.id) {
-            Object.assign(form, {
+            const preparedItems = (newOrder.order_items || []).map((item) => {
+                const menuItem = props.menuItems.find((mi) => mi.id === item.menu_item_id);
+                return {
+                    ...item,
+                    quantity: parseInt(item.quantity) || 1,
+                    unit_price: parseFloat(item.unit_price) || 0,
+                    subtotal: calculateSubtotal(item),
+                    menuItemName: menuItem ? menuItem.name : 'Producto cargado',
+                    selectedCategoryId: menuItem?.menu_category_id || null,
+                    isExpanded: !item.id,
+                    _temp_id: `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                };
+            });
+
+            form.defaults({
                 id: newOrder.id,
                 status: newOrder.status || '',
                 payment_method: newOrder.payment_method || '',
-                paid_at: newOrder.paid_at || '',
                 user_id: newOrder.user_id || '',
                 table_id: newOrder.table_id || '',
-            });
-        } else {
-            form.clearErrors();
-            form.reset();
+                items: preparedItems,
+            }).reset();
         }
     },
-    { immediate: true },
+    { immediate: true, deep: true },
 );
 
-const submitForm = () => {
-    const optionsForm = {
+const submit = () => {
+    if (!form.id) return;
+
+    form.transform((data) => ({
+        ...data,
+        items: data.items.map((item) => ({
+            ...item,
+            subtotal: calculateSubtotal(item),
+        })),
+    })).put(route('admin.orders.update', form.id), {
+        preserveScroll: true,
         onSuccess: () => {
-            form.clearErrors();
-            form.reset();
             const sidebarRight = document.getElementById('sidebar-right');
             if (sidebarRight) sidebarRight.checked = false;
         },
-    };
-
-    form.put(route('admin.orders.update', form), optionsForm);
-};
-
-const cancelForm = () => {
-    form.clearErrors();
-    form.reset();
+    });
 };
 </script>
 
 <template>
-    <div v-if="props.order" class="mx-auto my-8 w-full max-w-md">
+    <div class="mx-auto my-8 w-full max-w-2xl px-4 sm:px-0">
         <h2 class="mb-6 text-center text-2xl font-bold">Modificar Pedido</h2>
 
-        <div class="space-y-4">
-            <div class="form-control">
-                <label class="label mb-2 w-full" for="user_id">
-                    <span>Cambiar el camarero</span>
-                </label>
-                <div
-                    clas="w-full"
-                    :class="{ 'tooltip tooltip-top': form.status === 'pagado' }"
-                    :data-tip="form.status === 'pagado' ? 'No se puede cambiar si el estado es pagado' : null"
-                >
-                    <select
-                        id="user_id"
-                        v-model="form.user_id"
-                        class="select select-bordered w-full"
-                        :disabled="form.status === 'pagado'"
-                        :class="{ 'select-error': form.errors.user_id }"
-                    >
-                        <option disabled value="">Seleccione un camarero</option>
-                        <option v-for="user in users" :key="user.id" :value="user.id">
-                            {{ user.name }}
-                        </option>
-                    </select>
-                    <label class="label" v-if="form.errors.user_id">
-                        <span class="text-error">{{ form.errors.user_id }}</span>
-                    </label>
-                </div>
-            </div>
+        <div role="tablist" class="tabs tabs-bordered mb-6 w-full">
+            <button
+                role="tab"
+                @click="activeTab = 'order'"
+                :class="{ 'tab-active': activeTab === 'order' }"
+                class="tab"
+            >
+                Detalles Pedido
+            </button>
+            <button
+                role="tab"
+                @click="activeTab = 'items'"
+                :class="{ 'tab-active': activeTab === 'items' }"
+                class="tab"
+            >
+                Items ({{ form.items.length }})
+            </button>
+        </div>
 
-            <div class="form-control">
-                <label class="label mb-2 w-full" for="table_id">
-                    <span>Cambiar la mesa</span>
-                </label>
-                <div
-                    clas="w-full"
-                    :class="{ 'tooltip tooltip-top': form.status === 'pagado' }"
-                    :data-tip="form.status === 'pagado' ? 'No se puede cambiar si el estado es pagado' : null"
-                >
-                    <select
-                        id="table_id"
-                        v-model="form.table_id"
-                        class="select select-bordered w-full"
-                        :disabled="form.status === 'pagado'"
-                        :class="{ 'select-error': form.errors.table_id }"
-                    >
-                        <option disabled value="">Seleccione una mesa</option>
-                        <option v-for="table in availableTables" :key="table.id" :value="table.id">
-                            {{ table.name }}
-                        </option>
-                    </select>
-                </div>
-                <label class="label" v-if="form.errors.table_id">
-                    <span class="text-error">{{ form.errors.table_id }}</span>
-                </label>
-            </div>
+        <OrderDetails
+            v-show="activeTab === 'order'"
+            v-model:form="form"
+            :order="props.order"
+            :users="props.users"
+            :tables="props.tables"
+        />
 
-            <div class="form-control">
-                <label class="label mb-2" for="status">
-                    <span>Cambiar el estado del pedido</span>
-                </label>
-                <select
-                    id="status"
-                    v-model="form.status"
-                    class="select select-bordered w-full"
-                    :disabled="form.status === 'pagado' && !isEditing"
-                    :class="{ 'select-error': form.errors.status }"
-                >
-                    <option disabled value="">Seleccione un estado</option>
-                    <option value="pagado">Pagado</option>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="en preparacion">En preparación</option>
-                </select>
-                <label class="label" v-if="form.errors.status">
-                    <span class="text-error">{{ form.errors.status }}</span>
-                </label>
-            </div>
+        <OrderItems v-show="activeTab === 'items'" v-model:form="form" :menu-items="props.menuItems" />
 
-            <div v-if="form.status === 'pagado'" class="form-control">
-                <label class="label mb-2" for="payment_method">
-                    <span>Cambiar el metodo de pago</span>
-                </label>
-                <select
-                    id="payment_method"
-                    v-model="form.payment_method"
-                    class="select select-bordered w-full"
-                    :class="{ 'select-error': form.errors.payment_method }"
-                >
-                    <option disabled value="">Seleccione un metodo</option>
-                    <option value="efectivo">Efectivo</option>
-                    <option value="tarjeta">Tarjeta</option>
-                </select>
-                <label class="label" v-if="form.errors.payment_method">
-                    <span class="text-error">{{ form.errors.payment_method }}</span>
-                </label>
-            </div>
-
-            <div v-if="form.status === 'pagado'" class="form-control mt-4 text-base">
-                <span class="text-base-content font-semibold">Fecha de pago:</span>
-                <span class="text-base-content/70 ml-1"> {{ order.formated_paid_at }}</span>
-            </div>
-
-            <div class="form-control mt-4 text-base">
-                <span class="text-base-content font-semibold">Total:</span>
-                <span class="text-base-content/70 ml-1"> {{ order.formated_total }}</span>
-            </div>
-
-            <div class="pt-4 sm:grid sm:grid-cols-2 sm:gap-4">
-                <BtnSidebarRightCancel @click="cancelForm" />
-                <BtnPrimary type="button" @click="submitForm" :disabled="form.processing"> Actualizar </BtnPrimary>
-            </div>
+        <div class="pt-8 sm:grid sm:grid-cols-2 sm:gap-4">
+            <BtnSidebarRightCancel @click="cancelForm" />
+            <BtnPrimary type="button" @click="submit" :disabled="form.processing || !form.isDirty">
+                Guardar Cambios
+            </BtnPrimary>
         </div>
     </div>
 </template>

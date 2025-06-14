@@ -56,7 +56,7 @@ watch(
     </div>
 
     <div class="toast toast-end fixed z-[100] text-base" v-if="showToast">
-        <div :class="[`alert`, `alert-${toastType}`]">
+        <div class="alert" :class="'alert-' + toastType">
             <span>{{ toastMessage }}</span>
         </div>
     </div>

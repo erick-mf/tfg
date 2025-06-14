@@ -46,6 +46,11 @@ class Order extends Model
         return $this->belongsTo(Table::class, 'table_id');
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function getFormatedTotalAttribute()
     {
         return NumberFormatter::create('es', NumberFormatter::CURRENCY)->formatCurrency($this->total, 'EUR');

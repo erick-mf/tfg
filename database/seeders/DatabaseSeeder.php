@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             MenuItemSeeder::class,
             TableSeeder::class,
             OrderSeeder::class,
+            OrderItemSeeder::class,
         ]);
     }
 }

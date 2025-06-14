@@ -3,8 +3,10 @@
 namespace App\Repositories\Order;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Repositories\Table\TableRepositoryInterface;
 use Exception;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
@@ -30,7 +32,7 @@ class OrderRepository implements OrderRepositoryInterface
     public function paginate(int $perPage = 10)
     {
         try {
-            return $this->order->with('user', 'assignedTable')->orderBy('id', 'asc')->paginate($perPage);
+            return $this->order->with('user', 'assignedTable', 'orderItems.menuItem')->orderBy('id', 'asc')->paginate($perPage);
 
         } catch (Exception $e) {
             Log::error('Error paginating orders: '.$e->getMessage());
@@ -65,11 +67,10 @@ class OrderRepository implements OrderRepositoryInterface
     {
         try {
             return DB::transaction(function () use ($data, $order) {
-                // guardar la informacion anterior
+                $itemsData = Arr::pull($data, 'items', []);
                 $originalTableId = $order->table_id;
                 $currentStatus = $order->status;
 
-                // cambio de mesa
                 if (isset($data['table_id']) && $data['table_id'] != $originalTableId) {
                     $newTable = $this->table->findById($data['table_id']);
                     if (! $newTable) {
@@ -92,11 +93,10 @@ class OrderRepository implements OrderRepositoryInterface
                         if ($order->table_id && $currentStatus !== 'pagado') {
                             $this->table->changeStatus($order->table_id, 'disponible');
                         }
-
                         if ($currentStatus !== 'pagado') {
                             $data['paid_at'] = now();
                         }
-                    } else { // Si el nuevo estado NO es 'pagado'
+                    } else {
                         $data['paid_at'] = null;
                         $data['payment_method'] = null;
 
@@ -109,12 +109,32 @@ class OrderRepository implements OrderRepositoryInterface
                     }
                 }
 
-                return $order->update($data);
+                $order->update($data);
+
+                $incomingItemIds = collect($itemsData)->pluck('id')->filter()->all();
+
+                OrderItem::where('order_id', $order->id)
+                    ->whereNotIn('id', $incomingItemIds)
+                    ->delete();
+
+                foreach ($itemsData as $itemData) {
+                    $fillableData = Arr::only($itemData, (new OrderItem)->getFillable());
+
+                    OrderItem::updateOrCreate(
+                        ['id' => $itemData['id'] ?? null, 'order_id' => $order->id],
+                        $fillableData
+                    );
+                }
+
+                $order->total = $order->fresh()->load('orderItems')->orderItems->sum('subtotal');
+                $order->save();
+
+                return true;
             });
         } catch (Exception $e) {
-            Log::error('Error updating order: '.$e->getMessage());
+            Log::error('Error updating order and its items: '.$e->getMessage());
 
-            throw new RuntimeException('Error al actualizar el pedido');
+            throw new RuntimeException('Error al actualizar el pedido: '.$e->getMessage(), 0, $e);
         }
     }
 

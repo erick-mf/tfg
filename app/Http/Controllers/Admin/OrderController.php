@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
+use App\Repositories\MenuItem\MenuItemRepositoryInterface;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Table\TableRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -17,7 +18,8 @@ class OrderController extends Controller
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly UserRepositoryInterface $userRepository,
-        private readonly TableRepositoryInterface $tableRepository
+        private readonly TableRepositoryInterface $tableRepository,
+        private readonly MenuItemRepositoryInterface $menuRepository
     ) {}
 
     /**
@@ -29,6 +31,7 @@ class OrderController extends Controller
             $orders = $this->orderRepository->paginate();
             $users = $this->userRepository->all();
             $tables = $this->tableRepository->all();
+            $menuItems = $this->menuRepository->getMenuItemsAvailable();
 
             if ($orders->isEmpty() && $orders->currentPage() > 1) {
                 $targetPage = $orders->lastPage() > 0 ? $orders->lastPage() : 1;
@@ -40,7 +43,7 @@ class OrderController extends Controller
                 return redirect()->route('admin.orders.index', ['page' => $targetPage]);
             }
 
-            return Inertia::render('Admin/Order', compact('orders', 'users', 'tables'));
+            return Inertia::render('Admin/Order', compact('orders', 'users', 'tables', 'menuItems'));
         } catch (Exception $e) {
             return redirect()->back()->with('toast', ['type' => 'error', 'message' => $e->getMessage()]);
         }

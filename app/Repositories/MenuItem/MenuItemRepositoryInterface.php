@@ -17,4 +17,6 @@ interface MenuItemRepositoryInterface
     public function update(array $data, MenuItem $menuItem);
 
     public function delete(MenuItem $menuItem);
+
+    public function getMenuItemsAvailable();
 }
