@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('surnames');
             $table->string('phone');
             $table->string('phone_emergency')->nullable();
-            $table->enum('role', ['admin', 'encargado', 'cocinero', 'camarero']);
+            $table->enum('role', ['admin', 'encargado', 'cocinero', 'camarero', 'barman'])->default('camarero');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

@@ -39,5 +39,13 @@ class UserSeeder extends Seeder
                 'password' => '1234'.$i.'d',
             ]);
         }
+
+        for ($i = 1; $i < 6; $i++) {
+            User::factory()->create([
+                'name' => fake()->name(),
+                'role' => fake()->randomElement(['barman']),
+                'password' => '1234'.$i.'e',
+            ]);
+        }
     }
 }

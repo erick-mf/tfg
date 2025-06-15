@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'surnames' => fake()->name(),
             'phone' => fake()->phoneNumber(),
             'phone_emergency' => fake()->phoneNumber(),
-            'role' => fake()->randomElement(['cocinero', 'camarero']),
+            'role' => fake()->randomElement(['cocinero', 'camarero', 'barman']),
             'password' => '12345a',
             'remember_token' => Str::random(10),
         ];
