@@ -1,6 +1,9 @@
 <script setup>
 import MenuItem from '@/components/MenuItem.vue';
 import UserDropdown from '@/components/UserDropdown.vue';
+import { useAuth } from '@/composables/useAuth';
+
+const { ROLES, hasRole } = useAuth();
 </script>
 
 <template>
@@ -25,7 +28,11 @@ import UserDropdown from '@/components/UserDropdown.vue';
 
             <!-- Menú -->
             <ul class="flex flex-grow flex-col">
-                <MenuItem :href="route('admin.users.index')" :active="$page.url.startsWith('/admin/users')">
+                <MenuItem
+                    v-if="hasRole(ROLES.ADMIN)"
+                    :href="route('admin.users.index')"
+                    :active="$page.url.startsWith('/admin/users')"
+                >
                     Usuarios
                 </MenuItem>
                 <MenuItem :href="route('admin.locations.index')" :active="$page.url.startsWith('/admin/locations')">

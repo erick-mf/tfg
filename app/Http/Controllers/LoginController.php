@@ -37,15 +37,23 @@ class LoginController extends Controller
             Auth::login($user);
             $request->session()->regenerate();
 
-            if ($user->role == 'admin' || $user->role == 'encargado') {
-                return redirect()->route('admin.dashboard')->with('toast', ['type' => 'success', 'message' => 'Bienvenido']);
+            if ($user->role == 'admin') {
+                return redirect()->route('admin.users.index')->with('toast', ['type' => 'success', 'message' => 'Bienvenido']);
+
+            } elseif ($user->role == 'encargado') {
+                return redirect()->route('admin.locations.index')->with('toast', ['type' => 'success', 'message' => 'Bienvenido']);
+
             } elseif ($user->role == 'camarero') {
                 return redirect()->route('waiter.view')->with('toast', ['type' => 'success', 'message' => 'Bienvenido']);
+
             } elseif ($user->role == 'cocinero') {
                 return redirect()->route('kitchen.view')->with('toast', ['type' => 'success', 'message' => 'Bienvenido']);
-            } else {
+
+            } elseif ($user->role == 'barman') {
                 return redirect()->route('bar.view')->with('toast', ['type' => 'success', 'message' => 'Bienvenido']);
+
             }
+
         } else {
             return back()->withErrors(['password' => 'La contraseña es incorrecta'])->withInput($request->only('password'));
         }
