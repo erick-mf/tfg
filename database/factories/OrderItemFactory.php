@@ -27,7 +27,7 @@ class OrderItemFactory extends Factory
             'quantity' => $quantity,
             'unit_price' => $menuItem->price,
             'subtotal' => $subtotal,
-            'status' => fake()->randomElement(['enviado', 'cancelado', 'en preparacion']),
+            'status' => fake()->randomElement(['enviado', 'cancelado', 'en preparacion', 'listo', 'pendiente']),
             'notes' => fake()->sentence(5),
             'order_id' => $order->id,
             'menu_item_id' => $menuItem->id,

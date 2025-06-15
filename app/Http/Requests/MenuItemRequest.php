@@ -35,6 +35,7 @@ class MenuItemRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0'],
             'is_available' => ['boolean'],
             'image_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
+            'location' => ['required'],
             'menu_category_id' => ['required'],
         ];
     }
@@ -58,6 +59,8 @@ class MenuItemRequest extends FormRequest
             'image_path.image' => 'La imagen debe ser una imagen.',
             'image_path.mimes' => 'La imagen debe tener uno de los siguientes formatos: jpeg, png, jpg, webp.',
             'image_path.max' => 'La imagen debe tener un tamaño máximo de 2MB.',
+
+            'location.required' => 'La ubicación es obligatoria.',
 
             'menu_category_id.required' => 'La categoría es obligatoria.',
         ];

@@ -2,11 +2,18 @@
 import { useAuth } from '@/composables/useAuth';
 import { Link } from '@inertiajs/vue3';
 
+const props = defineProps({
+    direction: {
+        type: String,
+        default: 'top',
+    },
+});
+
 const { user } = useAuth();
 </script>
 
 <template>
-    <div class="dropdown dropdown-top">
+    <div class="dropdown" :class="props.direction === 'bottom' ? 'dropdown-end' : 'dropdown-top'">
         <label tabindex="0" class="ml-2 flex cursor-pointer flex-row items-center gap-2">
             <div class="btn btn-circle avatar avatar-placeholder bg-white">
                 <div class="w-16 rounded-full">

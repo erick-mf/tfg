@@ -15,17 +15,20 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'admin',
             'role' => 'admin',
+            'password' => '12345a',
         ]);
 
         User::factory()->create([
             'name' => 'encargado',
             'role' => 'encargado',
+            'password' => '12345b',
         ]);
 
         for ($i = 2; $i < 31; $i++) {
             User::factory()->create([
                 'name' => fake()->name(),
                 'role' => fake()->randomElement(['cocinero', 'camarero']),
+                'password' => '12345'.$i,
             ]);
         }
     }

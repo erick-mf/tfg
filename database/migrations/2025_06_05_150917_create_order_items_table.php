@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('quantity')->default(1);
             $table->decimal('unit_price', 8, 2);
             $table->decimal('subtotal', 8, 2);
-            $table->enum('status', ['enviado', 'cancelado', 'en preparacion'])->default('enviado');
+            $table->enum('status', ['enviado', 'cancelado', 'en preparacion', 'listo', 'pendiente'])->default('pendiente');
             $table->string('notes')->nullable();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('menu_item_id')->constrained()->onDelete('cascade');

@@ -43,6 +43,11 @@ export function validatorMenuItemForm(form) {
         }
     }
 
+    if (!form.location) {
+        form.setError('location', 'La ubicación es obligatoria.');
+        isValid = false;
+    }
+
     if (!form.menu_category_id) {
         form.setError('menu_category_id', 'La categoría es obligatoria.');
         isValid = false;

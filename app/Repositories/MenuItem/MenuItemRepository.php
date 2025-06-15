@@ -105,4 +105,18 @@ class MenuItemRepository implements MenuItemRepositoryInterface
     {
         return $this->menuItem->with('menuCategory')->where('is_available', true)->get();
     }
+
+    public function changeAvailability(MenuItem $menuItem)
+    {
+        try {
+            $menuItem->is_available = ! $menuItem->is_available;
+            $menuItem->save();
+
+            return $menuItem;
+        } catch (Exception $e) {
+            Log::error('Error changing menu item availability: '.$e->getMessage());
+
+            throw new RuntimeException('Error al cambiar la disponibilidad del menú');
+        }
+    }
 }

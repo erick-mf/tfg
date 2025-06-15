@@ -22,6 +22,7 @@ class MenuItemFactory extends Factory
             'price' => fake()->randomFloat(2, 1, 100),
             'is_available' => fake()->boolean(),
             'image_path' => 'default.webp',
+            'location' => fake()->randomElement(['cocina', 'barra']),
             'menu_category_id' => fake()->randomElement(MenuCategory::all())->id,
         ];
     }

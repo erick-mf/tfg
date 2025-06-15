@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->boolean('is_available')->default(true);
             $table->string('image_path')->nullable();
+            $table->enum('location', ['cocina', 'barra'])->nullable();
             $table->foreignId('menu_category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

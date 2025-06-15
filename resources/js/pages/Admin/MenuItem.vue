@@ -25,6 +25,7 @@ const columns = [
     { label: 'Disponibilidad', field: 'status' },
     { label: 'Precio', field: 'formated_price' },
     { label: 'Categoría', field: 'category_name' },
+    { label: 'Ubicación', field: 'location' },
 ];
 
 const editingMenuItem = ref(null);
@@ -35,6 +36,7 @@ function handleEditMenuItem(menuItem) {
         name: menuItem.name,
         price: menuItem.price,
         is_available: menuItem.is_available,
+        location: menuItem.location,
         menu_category_id: menuItem.menu_category_id,
         imagen_path: menuItem.image_path,
     };

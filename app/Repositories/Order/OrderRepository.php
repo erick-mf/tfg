@@ -160,4 +160,52 @@ class OrderRepository implements OrderRepositoryInterface
             throw new RuntimeException('Error al eliminar el pedido');
         }
     }
+
+    public function getOrderByLocation(string $location)
+    {
+        return $this->order
+            ->whereIn('status', ['enviado', 'en preparacion'])
+            ->whereHas('orderItems', function ($query) use ($location) {
+                $query
+                    ->whereIn('status', ['pendiente', 'enviado', 'en preparacion'])
+                    ->whereHas('menuItem', function ($subQuery) use ($location) {
+                        $subQuery->where('location', $location);
+                    });
+            })
+            ->with([
+                'user:id,name',
+                'assignedTable:id,name',
+
+                'orderItems' => function ($query) use ($location) {
+                    $query->whereHas('menuItem', function ($subQuery) use ($location) {
+                        $subQuery->where('location', $location);
+                    });
+                },
+                'orderItems.menuItem:id,name,location',
+            ])
+            ->orderBy('created_at', 'asc')
+            ->get();
+    }
+
+    public function getReadyOrdersByLocation(string $location)
+    {
+        return $this->order
+            ->whereIn('status', ['pendiente', 'en preparacion'])
+            ->whereHas('orderItems', function ($query) use ($location) {
+                $query->whereHas('menuItem', fn ($q) => $q->where('location', $location));
+            })
+            ->whereDoesntHave('orderItems', function ($query) use ($location) {
+                $query->whereIn('status', ['pendiente', 'enviado', 'en preparacion'])
+                    ->whereHas('menuItem', fn ($q) => $q->where('location', $location));
+            })
+            ->with([
+                'user:id,name',
+                'assignedTable:id,name',
+                'orderItems' => fn ($q) => $q->whereHas('menuItem', fn ($sq) => $sq->where('location', 'cocina')),
+                'orderItems.menuItem:id,name,location',
+            ])
+            ->orderBy('updated_at', 'desc')
+            ->limit(16)
+            ->get();
+    }
 }

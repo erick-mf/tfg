@@ -33,13 +33,13 @@ import UserDropdown from '@/components/UserDropdown.vue';
                     Usuarios
                 </MenuItem>
                 <MenuItem :href="route('admin.locations.index')" :active="$page.url.startsWith('/admin/locations')">
-                    Ubicaciones
-                </MenuItem>
-                <MenuItem :href="route('admin.categories.index')" :active="$page.url.startsWith('/admin/categories')">
-                    Categorias del Menú
+                    Ubicaciones de los Productos
                 </MenuItem>
                 <MenuItem :href="route('admin.products.index')" :active="$page.url.startsWith('/admin/products')">
                     Productos
+                </MenuItem>
+                <MenuItem :href="route('admin.categories.index')" :active="$page.url.startsWith('/admin/categories')">
+                    Categorias del Menú
                 </MenuItem>
                 <MenuItem :href="route('admin.menu-items.index')" :active="$page.url.startsWith('/admin/menu-items')">
                     Items del Menú

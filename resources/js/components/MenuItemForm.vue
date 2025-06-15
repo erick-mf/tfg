@@ -20,8 +20,10 @@ const form = useForm({
     id: null,
     name: '',
     price: '',
+    location: '',
     is_available: false,
     image_path: null,
+    location: '',
     menu_category_id: '',
     _method: 'POST',
 });
@@ -36,6 +38,7 @@ watch(
                 id: newMenuItem.id,
                 name: newMenuItem.name || '',
                 price: newMenuItem.price || '',
+                location: newMenuItem.location || '',
                 is_available: newMenuItem.is_available || false,
                 image_path: newMenuItem.image_path || null,
                 menu_category_id: newMenuItem.menu_category_id || '',
@@ -89,9 +92,7 @@ const cancelForm = () => {
 
         <div class="space-y-4">
             <div class="form-control">
-                <label class="label mb-2" for="name">
-                    <span>Nombre</span>
-                </label>
+                <label class="label mb-2" for="name"><span>Nombre</span></label>
                 <input
                     id="name"
                     v-model="form.name"
@@ -107,9 +108,7 @@ const cancelForm = () => {
             </div>
 
             <div class="form-control">
-                <label class="label mb-2" for="price">
-                    <span>Precio</span>
-                </label>
+                <label class="label mb-2" for="price"><span>Precio</span></label>
                 <input
                     id="price"
                     v-model="form.price"
@@ -126,9 +125,7 @@ const cancelForm = () => {
             </div>
 
             <div class="form-control">
-                <label class="label mb-2" for="menu_category_id">
-                    <span>Categoría</span>
-                </label>
+                <label class="label mb-2" for="menu_category_id"><span>Categoría</span></label>
                 <select
                     id="menu_category_id"
                     v-model="form.menu_category_id"
@@ -146,9 +143,26 @@ const cancelForm = () => {
             </div>
 
             <div class="form-control">
-                <label class="label mb-2" for="image_path">
-                    <span>Imagen</span>
+                <label class="label mb-2" for="location">
+                    <span>Ubicación</span>
                 </label>
+                <select
+                    id="location"
+                    v-model="form.location"
+                    class="select select-bordered w-full"
+                    :class="{ 'select-error': form.errors.location }"
+                >
+                    <option disabled value="">Seleccione una ubicación</option>
+                    <option value="cocina">Cocina</option>
+                    <option value="barra">Barra</option>
+                </select>
+                <label class="label" v-if="form.errors.location">
+                    <span class="text-error">{{ form.errors.location }}</span>
+                </label>
+            </div>
+
+            <div class="form-control">
+                <label class="label mb-2" for="image_path"><span>Imagen</span></label>
                 <input
                     id="image_path"
                     @change="form.image_path = $event.target.files[0]"
@@ -181,7 +195,7 @@ const cancelForm = () => {
 
             <div class="pt-4 sm:grid sm:grid-cols-2 sm:gap-4">
                 <BtnSidebarRightCancel @click="cancelForm" />
-                <BtnPrimary type="button" @click="submitForm" :disabled="form.processing">
+                <BtnPrimary type="button" @click="submitForm" :disabled="form.processing || !form.isDirty">
                     {{ isEditing ? 'Actualizar' : 'Guardar' }}
                 </BtnPrimary>
             </div>

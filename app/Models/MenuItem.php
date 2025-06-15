@@ -18,6 +18,7 @@ class MenuItem extends Model
         'price',
         'is_available',
         'image_path',
+        'location',
         'menu_category_id',
     ];
 
@@ -48,7 +49,7 @@ class MenuItem extends Model
 
     public function getCategoryNameAttribute()
     {
-        return $this->category ? $this->category->name : 'Sin categoría';
+        return $this->menuCategory ? $this->menuCategory->name : 'Sin categoría';
     }
 
     public function getImageUrlAttribute()
