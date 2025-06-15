@@ -12,4 +12,14 @@ class Table extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name', 'status'];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function activeOrder()
+    {
+        return $this->hasOne(Order::class)->whereNotIn('status', ['pagado', 'cancelado']);
+    }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Kitchen\KitchenController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\Waiter\WaiterController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -32,4 +33,10 @@ Route::prefix('kitchen')->group(function () {
     Route::get('/orders-data', [KitchenController::class, 'getOrdersData'])->name('kitchen.orders.data');
     Route::put('/menu-item/{menuItem}/toggle', [KitchenController::class, 'toggleAvailability'])->name('kitchen.menu-items.toggle');
     Route::put('/order-item/{orderItem}/status', [KitchenController::class, 'updateItemStatus'])->name('kitchen.updateItemStatus');
+});
+
+Route::prefix('waiter')->group(function () {
+    Route::get('/view', [WaiterController::class, 'index'])->name('waiter.view');
+    Route::post('/orders', [WaiterController::class, 'storeOrder'])->name('waiter.orders.store');
+    Route::put('/orders/{order}', [WaiterController::class, 'updateOrder'])->name('waiter.orders.update');
 });

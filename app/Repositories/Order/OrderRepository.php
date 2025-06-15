@@ -54,13 +54,31 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function create(array $data)
     {
-        try {
-            return $this->order->create($data);
-        } catch (Exception $e) {
-            Log::error('Error creating order: '.$e->getMessage());
+        return DB::transaction(function () use ($data) {
+            $itemsData = Arr::pull($data, 'items', []);
+            $tableId = $data['table_id'] ?? null;
 
-            throw new RuntimeException('Error al crear el pedido');
-        }
+            $order = $this->order->create($data);
+
+            if ($tableId) {
+                $this->table->changeStatus($tableId, 'ocupada');
+            }
+
+            $total = 0;
+
+            foreach ($itemsData as $itemData) {
+                $subtotal = $itemData['quantity'] * $itemData['unit_price'];
+                $itemData['subtotal'] = $subtotal;
+                $item = $order->orderItems()->create($itemData);
+
+                $total += $subtotal;
+            }
+
+            $order->total = $total;
+            $order->save();
+
+            return $order;
+        });
     }
 
     public function update(array $data, Order $order)
@@ -68,73 +86,43 @@ class OrderRepository implements OrderRepositoryInterface
         try {
             return DB::transaction(function () use ($data, $order) {
                 $itemsData = Arr::pull($data, 'items', []);
-                $originalTableId = $order->table_id;
-                $currentStatus = $order->status;
 
-                if (isset($data['table_id']) && $data['table_id'] != $originalTableId) {
-                    $newTable = $this->table->findById($data['table_id']);
-                    if (! $newTable) {
-                        throw new RuntimeException('La mesa seleccionada no existe');
+                if (isset($data['status']) && $data['status'] === 'pagado') {
+                    if ($order->table_id && $order->status !== 'pagado') {
+                        $this->table->changeStatus($order->table_id, 'disponible');
                     }
-                    if ($newTable->status !== 'disponible') {
-                        throw new RuntimeException('La mesa seleccionada no está disponible');
-                    }
-
-                    if ($originalTableId) {
-                        $this->table->changeStatus($originalTableId, 'disponible');
-                    }
-                    $this->table->changeStatus($data['table_id'], 'ocupada');
-                }
-
-                if (isset($data['status'])) {
-                    $newStatus = $data['status'];
-
-                    if ($newStatus === 'pagado') {
-                        if ($order->table_id && $currentStatus !== 'pagado') {
-                            $this->table->changeStatus($order->table_id, 'disponible');
-                        }
-                        if ($currentStatus !== 'pagado') {
-                            $data['paid_at'] = now();
-                        }
-                    } else {
-                        $data['paid_at'] = null;
-                        $data['payment_method'] = null;
-
-                        if ($currentStatus === 'pagado' &&
-                            $order->table_id &&
-                            (! isset($data['table_id']) || $data['table_id'] == $originalTableId)
-                        ) {
-                            $this->table->changeStatus($order->table_id, 'ocupada');
-                        }
+                    if ($order->status !== 'pagado') {
+                        $data['paid_at'] = now();
                     }
                 }
-
-                $order->update($data);
+                $order->update(Arr::except($data, ['items']));
 
                 $incomingItemIds = collect($itemsData)->pluck('id')->filter()->all();
-
                 OrderItem::where('order_id', $order->id)
                     ->whereNotIn('id', $incomingItemIds)
                     ->delete();
 
                 foreach ($itemsData as $itemData) {
-                    $fillableData = Arr::only($itemData, (new OrderItem)->getFillable());
+                    $itemData['subtotal'] = $itemData['quantity'] * $itemData['unit_price'];
 
                     OrderItem::updateOrCreate(
-                        ['id' => $itemData['id'] ?? null, 'order_id' => $order->id],
-                        $fillableData
+                        [
+                            'id' => $itemData['id'] ?? null,
+                            'order_id' => $order->id,
+                        ],
+                        $itemData
                     );
                 }
 
-                $order->total = $order->fresh()->load('orderItems')->orderItems->sum('subtotal');
+                $order->total = $order->fresh()->orderItems()->sum('subtotal');
                 $order->save();
 
-                return true;
+                return $order;
             });
         } catch (Exception $e) {
             Log::error('Error updating order and its items: '.$e->getMessage());
 
-            throw new RuntimeException('Error al actualizar el pedido: '.$e->getMessage(), 0, $e);
+            throw new RuntimeException('Error al actualizar el pedido');
         }
     }
 

@@ -114,4 +114,22 @@ class TableRepository implements TableRepositoryInterface
             throw new RuntimeException('Error al cambiar el estado de la mesa');
         }
     }
+
+    public function getAllWithActiveOrders()
+    {
+        try {
+            return $this->table
+                ->with([
+                    'activeOrder',
+                    'activeOrder.user:id,name',
+                    'activeOrder.orderItems.menuItem',
+                ])
+                ->orderBy('id', 'asc')
+                ->get();
+
+        } catch (Exception $e) {
+            Log::error('Error getting tables with active orders: '.$e->getMessage());
+            throw new RuntimeException('Error al obtener el estado de las mesas');
+        }
+    }
 }

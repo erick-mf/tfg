@@ -24,11 +24,19 @@ class UserSeeder extends Seeder
             'password' => '12345b',
         ]);
 
-        for ($i = 2; $i < 31; $i++) {
+        for ($i = 1; $i < 6; $i++) {
             User::factory()->create([
                 'name' => fake()->name(),
-                'role' => fake()->randomElement(['cocinero', 'camarero']),
-                'password' => '12345'.$i,
+                'role' => fake()->randomElement(['camarero']),
+                'password' => '1234'.$i.'c',
+            ]);
+        }
+
+        for ($i = 1; $i < 6; $i++) {
+            User::factory()->create([
+                'name' => fake()->name(),
+                'role' => fake()->randomElement(['cocinero']),
+                'password' => '1234'.$i.'d',
             ]);
         }
     }

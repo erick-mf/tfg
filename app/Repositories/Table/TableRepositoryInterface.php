@@ -19,4 +19,6 @@ interface TableRepositoryInterface
     public function delete(Table $table);
 
     public function changeStatus(int $id, string $status);
+
+    public function getAllWithActiveOrders();
 }
