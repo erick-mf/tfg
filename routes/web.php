@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\MenuCategoryController;
 use App\Http\Controllers\Admin\MenuItemController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\Kitchen\KitchenController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\Waiter\WaiterController;
+use App\Http\Controllers\ZReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -19,7 +19,6 @@ Route::post('/', [LoginController::class, 'store'])->name('login.submit');
 Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
 Route::prefix('admin')->middleware('role:admin,encargado')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/users', UserController::class);
     Route::resource('/locations', LocationController::class);
     Route::resource('/categories', MenuCategoryController::class);
@@ -27,6 +26,8 @@ Route::prefix('admin')->middleware('role:admin,encargado')->name('admin.')->grou
     Route::resource('/menu-items', MenuItemController::class);
     Route::resource('/tables', TableController::class);
     Route::resource('/orders', OrderController::class)->except('create', 'show', 'store');
+    Route::get('/z-reports', [ZReportController::class, 'index'])->name('z-reports.index');
+    Route::post('/z-reports', [ZReportController::class, 'store'])->name('z-reports.store');
 });
 
 Route::prefix('kitchen')->middleware('role:cocinero')->group(function () {

@@ -1,9 +1,7 @@
 <script setup>
 import EmptyState from '@/components/EmptyState.vue';
-import Filters from '@/components/Filters.vue';
 import MenuItemCard from '@/components/MenuItemCard.vue';
 import MenuItemForm from '@/components/MenuItemForm.vue';
-import SearchForm from '@/components/SearchForm.vue';
 import SidebarBtn from '@/components/SidebarBtn.vue';
 import SidebarRight from '@/components/SidebarRight.vue';
 import Table from '@/components/Table.vue';
@@ -52,8 +50,6 @@ function handleEditMenuItem(menuItem) {
                 <h1 class="text-sm font-semibold sm:text-xl">Lista de Items de Menu</h1>
 
                 <div class="flex items-center gap-3">
-                    <SearchForm />
-                    <Filters />
                     <SidebarBtn text="Nuevo Item" />
                 </div>
             </div>

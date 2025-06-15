@@ -19,6 +19,7 @@ class OrderSeeder extends Seeder
                 'paid_at' => now()->subDays($i),
             ]);
         }
+
         for ($i = 1; $i <= 21; $i++) {
             Order::factory()->create([
                 'status' => 'en preparacion',
@@ -26,6 +27,7 @@ class OrderSeeder extends Seeder
                 'paid_at' => null,
             ]);
         }
+
         for ($i = 1; $i <= 21; $i++) {
             Order::factory()->create([
                 'status' => 'pendiente',
@@ -33,6 +35,7 @@ class OrderSeeder extends Seeder
                 'paid_at' => null,
             ]);
         }
+
         for ($i = 1; $i <= 21; $i++) {
             Order::factory()->create([
                 'status' => 'pagado',

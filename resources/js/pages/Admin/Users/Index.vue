@@ -1,7 +1,5 @@
 <script setup>
 import EmptyState from '@/components/EmptyState.vue';
-import Filters from '@/components/Filters.vue';
-import SearchForm from '@/components/SearchForm.vue';
 import SidebarBtn from '@/components/SidebarBtn.vue';
 import SidebarRight from '@/components/SidebarRight.vue';
 import Table from '@/components/Table.vue';
@@ -47,8 +45,6 @@ function handleEditUser(user) {
                 <h1 class="text-sm font-semibold sm:text-xl">Lista de Usuarios</h1>
 
                 <div class="flex items-center gap-3">
-                    <SearchForm />
-                    <Filters />
                     <SidebarBtn text="Nuevo Empleado" />
                 </div>
             </div>

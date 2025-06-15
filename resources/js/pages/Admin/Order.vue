@@ -1,9 +1,7 @@
 <script setup>
 import EmptyState from '@/components/EmptyState.vue';
-import Filters from '@/components/Filters.vue';
 import OrderCard from '@/components/OrderCard.vue';
 import OrderForm from '@/components/OrderForm.vue';
-import SearchForm from '@/components/SearchForm.vue';
 import SidebarRight from '@/components/SidebarRight.vue';
 import Table from '@/components/Table.vue';
 import BaseLayout from '@/layouts/BaseLayout.vue';
@@ -56,11 +54,6 @@ function handleEditOrder(order) {
         <template #header>
             <div class="flex w-full items-center justify-between gap-4">
                 <h1 class="text-sm font-semibold sm:text-xl">Lista de Pedidos</h1>
-
-                <div class="flex items-center gap-3">
-                    <SearchForm />
-                    <Filters />
-                </div>
             </div>
         </template>
 

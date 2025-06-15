@@ -16,6 +16,7 @@ const roles = [
     { value: 'camarero', label: 'Camarero' },
     { value: 'cocinero', label: 'Cocinero' },
     { value: 'encargado', label: 'Encargado' },
+    { value: 'barman', label: 'Barman' },
 ];
 
 const form = useForm({
@@ -63,7 +64,7 @@ watch(
                 phone: newUser.phone || '',
                 phone_emergency: newUser.phone_emergency || '',
                 role: newUser.role || '',
-                password: '',
+                password: newUser.password || '',
             });
         } else {
             form.reset();
@@ -146,15 +147,14 @@ const cancelForm = () => {
                 </label>
             </div>
 
-            <!-- Contraseña (solo en creación) -->
-            <div class="form-control" v-if="!isEditing">
+            <div class="form-control">
                 <label class="label mb-2" for="password">
                     <span>Contraseña</span>
                 </label>
                 <input
                     id="password"
                     v-model="form.password"
-                    type="password"
+                    type="text"
                     placeholder="6 dígitos"
                     autocomplete="new-password"
                     class="input input-bordered w-full"

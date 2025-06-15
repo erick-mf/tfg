@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             TableSeeder::class,
             OrderSeeder::class,
             OrderItemSeeder::class,
+            ZReportSeeder::class,
         ]);
     }
 }

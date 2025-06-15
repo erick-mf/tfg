@@ -35,7 +35,7 @@ class UserRequest extends FormRequest
             'surnames' => ['required', 'string', 'min:3', 'max:150', 'regex:/^[\p{L}\s]+$/u'],
             'phone' => ['required',  'size:9', 'regex:/^[0-9]+$/'],
             'phone_emergency' => ['nullable',  'size:9', 'regex:/^[0-9]+$/'],
-            'role' => ['required', 'in:encargado,camarero,cocinero'],
+            'role' => ['required', 'in:encargado,camarero,cocinero,barman'],
         ];
         if ($this->isMethod('post')) {
             $rules['password'] = ['required', 'string', 'size:6', Rule::unique('users')];

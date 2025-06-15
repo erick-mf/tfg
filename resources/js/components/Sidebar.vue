@@ -25,10 +25,6 @@ import UserDropdown from '@/components/UserDropdown.vue';
 
             <!-- Menú -->
             <ul class="flex flex-grow flex-col">
-                <MenuItem :href="route('admin.dashboard')" :active="$page.url.startsWith('/admin/dashboard')">
-                    Dashboard
-                </MenuItem>
-
                 <MenuItem :href="route('admin.users.index')" :active="$page.url.startsWith('/admin/users')">
                     Usuarios
                 </MenuItem>
@@ -49,6 +45,9 @@ import UserDropdown from '@/components/UserDropdown.vue';
                 </MenuItem>
                 <MenuItem :href="route('admin.orders.index')" :active="$page.url.startsWith('/admin/orders')">
                     Pedidos
+                </MenuItem>
+                <MenuItem :href="route('admin.z-reports.index')" :active="$page.url.startsWith('/admin/z-reports')">
+                    Reportes
                 </MenuItem>
             </ul>
             <UserDropdown />

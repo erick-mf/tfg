@@ -18,6 +18,8 @@ use App\Repositories\Table\TableRepository;
 use App\Repositories\Table\TableRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\ZReport\ZReportRepository;
+use App\Repositories\ZReport\ZReportRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -35,6 +37,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TableRepositoryInterface::class, TableRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(OrderItemRepositoryInterface::class, OrderItemRepository::class);
+        $this->app->bind(ZReportRepositoryInterface::class, ZReportRepository::class);
     }
 
     /**
